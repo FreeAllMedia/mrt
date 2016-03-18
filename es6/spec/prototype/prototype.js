@@ -1,25 +1,45 @@
 import privateData from "incognito";
 import inflect from "jargon";
 
+const getParameters = Symbol();
+
 export default class ChainLink {
 	constructor(...options) {
-		this.links = [];
+		this.links = {
+			all: []
+		};
+		privateData(this).parameterCollections = [];
 		this.initialize(...options);
 	}
 
 	initialize () {}
 
 	parameters(...parameterNames) {
+		const _ = privateData(this);
+		//console.log(_);
 		if (parameterNames.length > 0) {
-			return new ParameterCollection(this, parameterNames);
+			//console.log("DO THISSSS!");
+			const parameterCollection = new ParameterCollection(this, parameterNames);
+			_.parameterCollections.push(parameterCollection);
+			return parameterCollection;
 		} else {
-			return this;
+			let parameterValues = {};
+
+			_.parameterCollections.forEach(parameterCollection => {
+				parameterValues = Object.assign(parameterValues, parameterCollection.parameters);
+			});
+
+			return parameterValues;
 		}
+	}
+
+	[getParameters]() {
+
 	}
 
 	link(methodName, LinkConstructor) {
 		const newLink = new Link(this, methodName, LinkConstructor);
-		this.links.push(newLink);
+		this.links.all.push(newLink);
 		return newLink;
 	}
 }
@@ -52,7 +72,7 @@ export class Link {
 		const _ = privateData(this);
 		const instance = new this.LinkConstructor(...options);
 
-		this.parentLink.links.forEach(link => {
+		this.parentLink.links.all.forEach(link => {
 			const methodPropertyDescriptor = Object.getOwnPropertyDescriptor(this.parentLink, link.methodName);
 			if (methodPropertyDescriptor.get && !methodPropertyDescriptor.set) {
 				Object.defineProperty(instance, link.methodName, {
@@ -63,16 +83,47 @@ export class Link {
 			}
 		});
 
-		if (_.into) {
-			this.parentLink[_.into].push(instance);
+		if (_.keyName) {
+			const methodLinks = this.parentLink.links[this.methodName] = this.parentLink.links[this.methodName] || {};
+
+			const parameterValues = instance.parameters();
+			const keyValue = parameterValues[_.keyName];
+
+			methodLinks[keyValue] = instance;
 		}
+
+		if (_.into) {
+			const intoLink = this.parentLink[_.into];
+			const constructorIsArray = intoLink.constructor === Array;
+
+			if (constructorIsArray) {
+				intoLink.push(instance);
+			} else {
+				const parameterValues = instance.parameters();
+				const keyValue = parameterValues[_.keyName];
+
+				intoLink[keyValue] = instance;
+			}
+
+			if (_.keyName) {
+				if (constructorIsArray) {
+					let intoObjects = {};
+					intoLink.forEach(intoObject => {
+						const keyValue = intoObject.parameters()[_.keyName];
+						intoObjects[keyValue] = intoObject;
+					});
+					this.parentLink[_.into] = intoObjects;
+				}
+			}
+		}
+
 		return instance;
 	}
 
 	into(collectionName) {
 		const _ = privateData(this);
 		_.into = collectionName;
-		this.parentLink[_.into] = [];
+		this.parentLink[_.into] = this.parentLink[_.into] || [];
 		return this;
 	}
 
@@ -96,7 +147,12 @@ export class ParameterCollection {
 		_.aggregate = false;
 		_.multiValue = false;
 
+		this.parameters = {};
+
 		_.parameterNames.forEach(parameterName => {
+
+			this.parameters[parameterName] = this.parameters[parameterName] || null;
+
 			_.parentLink[parameterName] = (...newValue) => {
 				if (newValue.length > 0) {
 					if (!_.multiValue) {
@@ -104,21 +160,21 @@ export class ParameterCollection {
 					}
 
 					if (_.aggregate || _.multiValue) {
-						if (!_[parameterName]) { _[parameterName] = []; }
+						if (!this.parameters[parameterName]) { this.parameters[parameterName] = []; }
 					}
 
 					if (_.aggregate || _.multiValue) {
 						if (_.aggregate) {
-							_[parameterName].push(newValue);
+							this.parameters[parameterName].push(newValue);
 						} else {
-							_[parameterName] = newValue;
+							this.parameters[parameterName] = newValue;
 						}
 					} else {
-						_[parameterName] = newValue;
+						this.parameters[parameterName] = newValue;
 					}
 					return parentLink;
 				} else {
-					return _[parameterName];
+					return this.parameters[parameterName];
 				}
 			};
 		});

@@ -1,4 +1,5 @@
 import ChainLink, { ParameterCollection } from "./prototype.js";
+import Async from "async";
 
 describe("Mr.T. Prototype", () => {
 	let person;
@@ -28,8 +29,24 @@ describe("Mr.T. Prototype", () => {
 		});
 
 		describe("(Without Parameter Names)", () => {
-			it("should return this to enable chaining", () => {
-				person.parameters().should.equal(person);
+			beforeEach(() => {
+				person.parameters("name", "age");
+			});
+
+			it("should return an object of all parameter values when set", () => {
+				person.name("Bob");
+				person.age(44);
+				person.parameters().should.eql({
+					name: "Bob",
+					age: 44
+				});
+			});
+
+			it("should return an object of all parameter values as undefined when not set", () => {
+				person.parameters().should.eql({
+					name: null,
+					age: null
+				});
 			});
 		});
 
@@ -140,6 +157,7 @@ describe("Mr.T. Prototype", () => {
 				beforeEach(() => {
 					person.link("arm", Arm).into("arms");
 				});
+
 				it("should add each new instance of Arm into .arms", () => {
 					const longArm = person.arm("long");
 					const shortArm = person.arm("short");
@@ -165,17 +183,21 @@ describe("Mr.T. Prototype", () => {
 				});
 			});
 
-			xdescribe(".usingKey", () => {
+			describe(".usingKey", () => {
 				let leftArm;
 
-				beforeEach(() => {
+				it("should use the provided key for the link collection", () => {
 					person.link("arm", Arm).usingKey("position");
-
 					leftArm = person.arm("left");
+
+					person.links.arm.left.should.eql(leftArm);
 				});
 
-				it("should use the provided key for the link collection", () => {
-					person.links.arm("left").should.eql(leftArm);
+				it("should use the provided key for the into collection", () => {
+					person.link("arm", Arm).into("arms").usingKey("position");
+					leftArm = person.arm("left");
+
+					person.arms.left.should.eql(leftArm);
 				});
 			});
 
@@ -203,18 +225,18 @@ describe("Mr.T. Prototype", () => {
 
 describe("Just For Fun", () => {
 	class Car extends ChainLink {
-		initialize(make, model) {
-			this.parameters("make", "model");
+		initialize(year, make, model) {
+			this.parameters("year", "make", "model");
+			this.year(year);
 			this.make(make);
 			this.model(model);
-			this.parameters("coup", "sedan").asProperty;
 
 			this.link("wheel", Wheel).into("wheels");
 			this.link("dent", Dent).asProperty;
 		}
 
 		honk() {
-			console.log("HONK!");
+			process.stdout.write("HONK!");
 			return this;
 		}
 	}
@@ -224,12 +246,12 @@ describe("Just For Fun", () => {
 			this.parameters("diameter");
 			this.diameter(diameter);
 
-			this.link("lugNut", HubCap).into("lugNuts");
+			this.link("lugNut", LugNut).into("lugNuts");
 			this.lugNut("chrome");
 		}
 	}
 
-	class HubCap extends ChainLink {
+	class LugNut extends ChainLink {
 		initialize(color) {
 			this.parameters("color");
 			this.color(color);
@@ -241,19 +263,23 @@ describe("Just For Fun", () => {
 	let car;
 
 	beforeEach(() => {
-		car = new Car("Volkswagen", "Rabbit");
+		car = new Car("2016", "Tesla", "S");
 
-		const dent = car
-			.wheel(33)
-			.dent
-			.wheel(33)
-			.wheel(33)
-			.wheel(33)
-			.wheel(33);
+		const wheelOne = car.wheel(10);
+		const wheelTwo = car.wheel(10);
+
+		Async.times(4, () => {
+			wheelOne.lugNut("black");
+			wheelTwo.lugNut("chrome");
+		});
+
+		car
+			.wheel(10)
+			.wheel(10);
 	});
 
 	it("Should blah", () => {
-		const firstWheel = car.wheels[0];
-		//console.log(firstWheel.lugNuts[0].color());
+		//console.log(car.parameters());
+		//console.log(car.wheels[0].lugNuts[0].parameters());
 	});
 });
