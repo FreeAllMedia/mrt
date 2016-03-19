@@ -1,6 +1,8 @@
 import privateData from "incognito";
 import inflect from "jargon";
 
+import Link from "./link.js";
+
 const getParameters = Symbol();
 
 export default class ChainLink {

@@ -1,7 +1,7 @@
 import ChainLink, { ParameterCollection } from "./prototype.js";
 import Async from "async";
 
-describe("Mr.T. Prototype", () => {
+xdescribe("Mr.T. Prototype", () => {
 	let person;
 
 	class Person extends ChainLink {}
@@ -223,7 +223,7 @@ describe("Mr.T. Prototype", () => {
 	});
 });
 
-describe("Just For Fun", () => {
+xdescribe("Just For Fun", () => {
 	class Car extends ChainLink {
 		initialize(year, make, model) {
 			this.parameters("year", "make", "model");
