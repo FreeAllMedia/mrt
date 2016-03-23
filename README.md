@@ -1,120 +1,297 @@
-![](./images/akiro-logo.png)
+![](./images/mrt-logo.png)
 
-# Akiro.js [![npm version](https://img.shields.io/npm/v/akiro.svg)](https://www.npmjs.com/package/akiro) [![license type](https://img.shields.io/npm/l/akiro.svg)](https://github.com/FreeAllMedia/akiro.git/blob/master/LICENSE) ![ECMAScript 2015 Source](https://img.shields.io/badge/Source-ECMAScript%202015-brightgreen.svg) [![npm downloads](https://img.shields.io/npm/dm/akiro.svg)](https://www.npmjs.com/package/akiro) [![node 5.x.x](https://img.shields.io/badge/node-5.x.x-brightgreen.svg)](https://travis-ci.org/FreeAllMedia/akiro) [![node 4.x.x](https://img.shields.io/badge/node-4.x.x-brightgreen.svg)](https://travis-ci.org/FreeAllMedia/akiro) [![node 3.x.x](https://img.shields.io/badge/node-3.x.x-brightgreen.svg)](https://travis-ci.org/FreeAllMedia/akiro) [![iojs 2.x.x](https://img.shields.io/badge/iojs-2.x.x-brightgreen.svg)](https://travis-ci.org/FreeAllMedia/akiro) [![iojs 1.x.x](https://img.shields.io/badge/iojs-1.x.x-brightgreen.svg)](https://travis-ci.org/FreeAllMedia/akiro) [![node 0.12.x](https://img.shields.io/badge/node-0.12.x-brightgreen.svg)](https://travis-ci.org/FreeAllMedia/akiro) [![node 0.11.x](https://img.shields.io/badge/node-0.11.x-brightgreen.svg)](https://travis-ci.org/FreeAllMedia/akiro) [![node 0.10.x](https://img.shields.io/badge/node-0.10.x-brightgreen.svg)](https://travis-ci.org/FreeAllMedia/akiro) [![Build Status](https://travis-ci.org/FreeAllMedia/akiro.png?branch=master)](https://travis-ci.org/FreeAllMedia/akiro) [![Dependency Status](https://david-dm.org/FreeAllMedia/akiro.png?theme=shields.io)](https://david-dm.org/FreeAllMedia/akiro?theme=shields.io) [![Dev Dependency Status](https://david-dm.org/FreeAllMedia/akiro/dev-status.svg)](https://david-dm.org/FreeAllMedia/akiro?theme=shields.io#info=devDependencies) [![Coverage Status](https://coveralls.io/repos/FreeAllMedia/akiro/badge.svg)](https://coveralls.io/r/FreeAllMedia/akiro) [![Code Climate](https://codeclimate.com/github/FreeAllMedia/akiro/badges/gpa.svg)](https://codeclimate.com/github/FreeAllMedia/akiro) [![bitHound Score](https://www.bithound.io/github/FreeAllMedia/akiro/badges/score.svg)](https://www.bithound.io/github/FreeAllMedia/akiro)
+Mr. T makes chaining easy! Use it to create simple or complex chained interfaces for your own libraries!
 
-When you get started with `AWS Lambda` functions, you may need to use an `npm package` that contains native extensions (such as C or C++). If you try to compile these packages on your development computer, then deploy that code to `AWS Lambda`, it will fail because the code wasn't compiled for the environment it was deployed to.
-
-* `Akiro` solves this problem by deploying a single `AkiroBuilder` function to your `AWS Lambda` account which compiles `npm packages` for you indirectly on the architecture that the code is going to run on.
-* Packages are built in parallel using multiple invokes of the same `AkiroBuilder Lambda` to minimize build time and prevent `AWS Lambda Function Timeout` (max 300 seconds).
-* After the packages are built, they are automatically saved to an S3 bucket of your designation, then optionally downloaded and unzipped to a local directory.
-* Built-in support for local caching so that any specific version of any package is only built once and then re-used to optimize deployment times. This greatly optimizes deployment speeds!
+**Simple chain:**
 
 ``` javascript
-import Akiro from "akiro";
-const akiro = new Akiro({
-	region: "us-east-1",
-	bucket: "fam-akiro",
-	debug: 1
-});
+import Server from "server";
 
-const packages = {
-	"flowsync": "^0.1.12",
-	"almaden": "^0.3.1",
-	"dovima": "^0.3.2",
-	"incognito": "^0.1.4"
-};
+const server = new Server();
 
-const outputDirectory = `${process.cwd()}/node_modules_aws/`;
+server
+	.listen(3030)
+	.logTo("./server.log")
+	.onRequest((request, response) => {
+		console.log(`Received request with body: ${request.body}`);
+	});
+```
 
-akiro.package(packages, outputDirectory, (packageError) => {
-	if (packageError) { throw packageError; }
-	console.log("Voila!", `ls -lah ${outputDirectory}`);
-});
+**Complex multi-tiered chain:**
+
+``` javascript
+import Server from "server";
+import AccountController from "./controllers/account.controller.js";
+
+const accountController = new AccountController();
+
+const server = new Server();
+
+server
+	.public
+		.get("/account")
+			.action(accountController.list)
+		.get("/account/:id")
+			.action(accountController.show)
+	.authenticated
+		.authorized("owner", "admin")
+			.put("/account/:id")
+				.action(accountController.update)
+		.authorized("admin")
+			.post("/account")
+				.action(accountController.create)
+			.delete("/account/:id")
+				.action(accountController.delete);
 ```
 
 # Getting Started
 
-`Akiro` requires minimal initial configuration before its automation can take over. Please read through this entire guide before attempting to use `Akiro`. It may save you much grief!
-
 ## Installation
 
-The easiest way to install Akiro is through the node package manager:
+The easiest and fastest way to install Mr. T is through the `node package manager`:
 
 ``` shell
-npm install akiro --save-dev
+$ npm install mrt --save
 ```
 
-## Configuration
+## Creating a Simple Chain
 
-There are *two* mandatory ways you must configure Akiro:
+### Inherit Mr. T's ChainLink
 
-1. Setup your own AWS Credentials so that you can deploy an `AWS Lambda Function` to your account.
-2. Setup an `AWS IAm Role` for the `AkiroBuilder Lambda Function` to save objects to `AWS S3`.
-	* This is required because `AWS Lambdas` don't have a way to send back the compiled packages on their own.
-	* Instead, `Akiro` saves the compiled packages to an `AWS S3 Bucket` of your choice so that `Akiro` can download them back to your computer.
-3. Initialize `Akiro` to the `AWS Regions` you will use it on.
+To use Mr. T, create a constructor function that inherits from Mr.T's `ChainLink`. This is done in two different ways depending on whether you're using ES5 or ES6+:
 
-### 1. Setup Your Own `~/.aws/credentials`
-
-* Akiro expects there to be an ~/.aws/credentials file.
-* For more information on how to set up this file, [read this guide](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Credentials_from_the_Shared_Credentials_File_____aws_credentials_).
-* In the future, we will add support for specifying credentials manually in other ways.
-	* Please submit an issue if you urgently require a different method.
-
-### 2. Setup an AWS IAm Role For AkiroBuilder
-
-Due to the size of this section, we've decided to put it onto its own page. Behold, it has pictures!
-
-* [The Official Guide to Setting Up an AWS IAm Role For Akiro](./documentation/awsIamRoleSetup.md)
-
-### 3. Initialize Akiro
-
-* Initializing deploys an `AWS Lambda` called `AkiroBuilder` to an `AWS Region` of your choice.
-* The `AkiroBuilder Lambda Function` is fundamental for the functionality of `Akiro`.
-* Akiro only needs to be initialized **once per `AWS Region`** that your organization will deploy `AWS Lambdas` to:
-* This process will be simplified in later BETA releases.
+**ES5 Example:**
 
 ``` javascript
-import Akiro from "akiro";
-const akiro = new Akiro({
-	region: "us-east-1",
-	debug: 1
-});
+var ChainLink = require("mrt");
 
-const iamRoleName = "AWSLambda";
+function Server() {}
 
-akiro.initialize(iamRoleName, error => {
-	if (error) { throw error; }
-	console.log("Akiro deployed.");
-});
+Server.prototype = Object.create(ChainLink.prototype);
 ```
 
-# Building Packages
-
-After `Akiro` is configured and initialized the `akiro.package()` method becomes available for everybody in the orignanization to build packages on the `AkiroBuilder`.
-
-## akiro.package(packageList, outputDirectory, callback)
+**ES6 Example:**
 
 ``` javascript
-import Akiro from "akiro";
-const akiro = new Akiro({
-	region: "us-east-1", // Defaults to "us-east-1"
-	bucket: "my-akiro-bucket", // Required
-	debug: 1 // Comment out to run silent
-});
+import ChainLink from "mrt";
 
-const packages = {
-	"flowsync": "^0.1.12",
-	"almaden": "^0.3.1",
-	"dovima": "^0.3.2",
-	"incognito": "^0.1.4"
-};
+class Server extends ChainLink {}
+```
 
-const outputDirectory = `${process.cwd()}/node_modules_aws/`;
+### Add Simple Properties
 
-akiro.package(packages, outputDirectory, (packageError) => {
-	if (packageError) { throw packageError; }
-	console.log("Voila!", `ls -lah ${outputDirectory}`);
-});
+`Mr. T` can either use the default constructor, or a built-in alternate "constructor" called `.initialize()` which automatically calls `super()` for you. This conveniently avoids the "must call super() before this" error:
 
+``` javascript
+import ChainLink from "mrt";
+
+class Server extends ChainLink {
+	initialize(name) {
+		this.properties(
+			"name",
+			"port",
+			"logTo"
+		);
+
+		this.name(name);
+	}
+}
+
+const server = new Server("My Server");
+
+server
+	.port(3030)
+	.logTo("./server.log");
+
+server.name(); // "My Server"
+server.port(); // 3030
+server.logTo(); // "./server.log"
+```
+
+### Add Complex Properties
+
+In addition to adding simple properties with a single value, you can also add properties with multiple and aggregate values:
+
+``` javascript
+import ChainLink from "mrt";
+
+class Person extends ChainLink {
+	initialize(name) {
+		this.properties("name");
+
+		this.name(name);
+
+		this.properties("dead").asProperty;
+
+		this.properties("thought")
+			.aggregate
+			.into("thoughts");
+
+		this.properties("placeOfOrigin")
+			.multiValue;
+
+		this.properties("placeVisited")
+			.multiValue
+			.aggregate
+			.into("placesVisited");
+	}
+}
+
+const person = new Person("Lex Luthor");
+
+person.isDead; // false
+person.dead;
+person.isDead; // true
+
+person.placeOfOrigin("Metropolis", "Delaware");
+
+person
+	.placeVisited("Gotham", "New Jersey")
+	.placeVisited("Metropolis", "Delaware");
+
+person.placesVisited; // [["Gotham", "New Jersey"], ["Metropolis", "Delaware"]]
+
+person
+	.thought("Superman is a real jerk!");
+	.thought("Darn you Batman!");
+	.thought("Does this robotic death suit make me look fat?");
+
+person.thoughts; // ["Superman is a real jerk!", "Darn you Batman!", "Does this robotic death suit make me look fat?"]
+```
+
+### Add Chain Links
+
+A `ChainLink` can `.link()` to another `ChainLink` to form complex multi-tiered chained interfaces:
+
+``` javascript
+import ChainLink from "mrt";
+
+class Monster extends ChainLink {
+	initialize(name) {
+		this.properties("name");
+		this.name(name);
+
+		this.link("tentacle", Tentacle).into("tentacles");
+
+		this.link("eye", Eye).into("eyes").asProperty;
+	}
+}
+
+class Tentacle extends ChainLink {
+	initialize(hitpoints) {
+		this.properties("hitpoints");
+		this.hitpoints(hitpoints);
+
+		this.link("spike", Spike).into("spikes").asProperty;
+	}
+}
+
+class Spike extends ChainLink {}
+
+class Eye extends ChainLink {}
+
+const monster = new Monster("Zig Zug");
+
+monster
+	.eye
+	.eye
+	.eye
+	.tentacle(10)
+		.spike.spike.spike.spike.spike.spike
+	.tentacle(10)
+		.spike.spike.spike
+	.tentacle(20)
+		.spike.spike.spike.spike
+	.tentacle(20)
+		.spike.spike;
+
+monster.eyes.length; // 3
+monster.tentacles.length; // 4
+
+const firstTentacle = monster.tentacles[0];
+
+firstTentacle.hitpoints(); // 10
+firstTentacle.spikes.length; // 6
+```
+
+### Add Behavior
+
+Mr. T isn't just about creating data structures (though you can certainly use it for only that purpose!). You can also add custom behavior to `ChainLinks` by adding methods the way you normally would:
+
+``` javascript
+import ChainLink from "mrt";
+
+class Vehicle extends ChainLink {
+	initialize() {
+		this.parameters("type", "make", "model", "color");
+
+		this.type("vehicle");
+		this.link("wheel", Wheel).into("wheels");
+	}
+
+	start() {
+		console.log(`Vroom! Vroom! The ${this.type} has started!`)
+	}
+
+	get honk() {
+		console.log("This vehicle is unfortunately not equipped with a horn.");
+	}
+}
+
+class Wheel extends ChainLink {
+	initialize(diameter) {
+		this.parameters("diameter");
+		this.diameter(diameter);
+	}
+}
+
+class Car extends Vehicle {
+	initialize() {
+		super();
+		this.type("car");
+
+		this
+			.wheel(20)
+			.wheel(20)
+			.wheel(20)
+			.wheel(20);
+	}
+
+	get honk() {
+		console.log("Honk! Honk!");
+	}
+}
+
+class Motorcycle extends Vehicle {
+	initialize() {
+		super();
+
+		this.type("motorcycle");
+		this
+			.wheel(17)
+			.wheel(17);
+	}
+
+	get honk() {
+		console.log("Meep! Meep!");
+	}
+}
+
+const car = new Car();
+car
+	.make("Volkswagen")
+	.model("Golf")
+	.color("green");
+
+car.start(); // "Vroom! Vroom! The car has started!"
+car.honk; // "Honk! Honk!"
+
+const motorcycle = new Motorcycle();
+motorcycle
+	.make("Kawasaki")
+	.model("Ninja")
+	.color("black");
+
+motorcycle.start(); // "Vroom! Vroom! The motorcycle has started!"
+motorcycle.honk; // "Meep! Meep!"
 ```
