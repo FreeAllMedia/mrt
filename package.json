@@ -1,7 +1,7 @@
 {
   "name": "mrt",
-  "version": "0.0.0",
-  "description": "MrT pities the fool that don't chain their interfaces!",
+  "version": "0.0.1",
+  "description": "Mrt makes creating simple and complex chained interfaces simple.",
   "main": "index.js",
   "scripts": {
     "test": "gulp test"
@@ -13,9 +13,6 @@
   "keywords": [
     "chain",
     "interface",
-    "pity",
-    "the",
-    "fool",
     "mrt"
   ],
   "author": "dcrockwell",
