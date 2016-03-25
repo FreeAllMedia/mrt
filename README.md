@@ -1,8 +1,14 @@
-![](./images/mrt-logo.png)
+# Mrt
 
-Mr. T makes chaining easy! Use it to create simple or complex chained interfaces for your own libraries!
+[![npm version](https://img.shields.io/npm/v/mrt.svg)](https://www.npmjs.com/package/mrt) [![license type](https://img.shields.io/npm/l/mrt.svg)](https://github.com/FreeAllMedia/mrt.git/blob/master/LICENSE) [![npm downloads](https://img.shields.io/npm/dm/mrt.svg)](https://www.npmjs.com/package/mrt) ![Source: ECMAScript 6](https://img.shields.io/badge/Source-ECMAScript_2015-green.svg)
+[![Build Status](https://travis-ci.org/FreeAllMedia/mrt.png?branch=master)](https://travis-ci.org/FreeAllMedia/mrt) [![Coverage Status](https://coveralls.io/repos/FreeAllMedia/mrt/badge.svg)](https://coveralls.io/r/FreeAllMedia/mrt) [![Code Climate](https://codeclimate.com/github/FreeAllMedia/mrt/badges/gpa.svg)](https://codeclimate.com/github/FreeAllMedia/mrt) [![bitHound Score](https://www.bithound.io/github/FreeAllMedia/mrt/badges/score.svg)](https://www.bithound.io/github/FreeAllMedia/mrt) [![Dependency Status](https://david-dm.org/FreeAllMedia/mrt.png?theme=shields.io)](https://david-dm.org/FreeAllMedia/mrt?theme=shields.io) [![Dev Dependency Status](https://david-dm.org/FreeAllMedia/mrt/dev-status.svg)](https://david-dm.org/FreeAllMedia/mrt?theme=shields.io#info=devDependencies)
+![node 5.x.x](https://img.shields.io/badge/node-5.x.x-brightgreen.svg) ![node 4.x.x](https://img.shields.io/badge/node-4.x.x-brightgreen.svg) ![node 0.12.x](https://img.shields.io/badge/node-0.12.x-brightgreen.svg) ![node 0.11.x](https://img.shields.io/badge/node-0.11.x-brightgreen.svg) ![node 0.10.x](https://img.shields.io/badge/node-0.10.x-brightgreen.svg) ![iojs 2.x.x](https://img.shields.io/badge/iojs-2.x.x-brightgreen.svg) ![iojs 1.x.x](https://img.shields.io/badge/iojs-1.x.x-brightgreen.svg)
+
+Mrt makes chaining easy! Use it to create simple or complex chained interfaces for your own libraries!
 
 **Simple chain:**
+
+You can create simple interfaces for your libraries using Mrt:
 
 ``` javascript
 import Server from "server";
@@ -18,6 +24,8 @@ server
 ```
 
 **Complex multi-tiered chain:**
+
+You can also create complex chained interfaces involving many chains each with their own properties:
 
 ``` javascript
 import Server from "server";
@@ -48,17 +56,17 @@ server
 
 ## Installation
 
-The easiest and fastest way to install Mr. T is through the `node package manager`:
+The easiest and fastest way to install Mrt is through the `node package manager`:
 
 ``` shell
 $ npm install mrt --save
 ```
 
-## Creating a Simple Chain
+# Creating a Simple Chain
 
-### Inherit Mr. T's ChainLink
+## Inherit Mrt's ChainLink
 
-To use Mr. T, create a constructor function that inherits from Mr.T's `ChainLink`. This is done in two different ways depending on whether you're using ES5 or ES6+:
+To use Mrt, create a constructor function that inherits from Mrt's `ChainLink`. This is done in two different ways depending on whether you're using ES5 or ES6+:
 
 **ES5 Example:**
 
@@ -78,9 +86,9 @@ import ChainLink from "mrt";
 class Server extends ChainLink {}
 ```
 
-### Add Simple Properties
+## Add Simple Properties
 
-`Mr. T` can either use the default constructor, or a built-in alternate "constructor" called `.initialize()` which automatically calls `super()` for you. This conveniently avoids the "must call super() before this" error:
+`Mrt` can either use the default constructor, or a built-in alternate "constructor" called `.initialize()` which automatically calls `super()` for you. This conveniently avoids the "must call super() before this" error:
 
 ``` javascript
 import ChainLink from "mrt";
@@ -159,7 +167,9 @@ person
 person.thoughts; // ["Superman is a real jerk!", "Darn you Batman!", "Does this robotic death suit make me look fat?"]
 ```
 
-### Add Chain Links
+# Creating Complex Chains
+
+## Add Chain Links
 
 A `ChainLink` can `.link()` to another `ChainLink` to form complex multi-tiered chained interfaces:
 
@@ -214,9 +224,9 @@ firstTentacle.hitpoints(); // 10
 firstTentacle.spikes.length; // 6
 ```
 
-### Add Behavior
+## Add Behavior
 
-Mr. T isn't just about creating data structures (though you can certainly use it for only that purpose!). You can also add custom behavior to `ChainLinks` by adding methods the way you normally would:
+Mrt isn't just about creating data structures (though you can certainly use it for only that purpose!). You can also add custom behavior to `ChainLinks` by adding methods the way you normally would:
 
 ``` javascript
 import ChainLink from "mrt";
