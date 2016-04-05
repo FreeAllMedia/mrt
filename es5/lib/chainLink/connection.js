@@ -10,6 +10,10 @@ var _incognito = require("incognito");
 
 var _incognito2 = _interopRequireDefault(_incognito);
 
+var _jargon = require("jargon");
+
+var _jargon2 = _interopRequireDefault(_jargon);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24,6 +28,7 @@ var Connection = function () {
 
 		var _ = (0, _incognito2.default)(this);
 
+		_.inherit = false;
 		_.into = false;
 
 		this.parentLink = parentLink;
@@ -104,6 +109,22 @@ var Connection = function () {
 				}
 			}
 
+			if (_.inherit) {
+				var inheritedParameterNames = _.inherit;
+
+				inheritedParameterNames.forEach(function (parameterName) {
+					var capitalizedMethodName = (0, _jargon2.default)(parameterName).pascal.toString();
+					var getMethodName = "is" + capitalizedMethodName;
+
+					if (_this2.parentLink.hasOwnProperty(getMethodName)) {
+						instance[parameterName];
+					} else {
+						var parameterValue = _this2.parentLink[parameterName]();
+						instance[parameterName](parameterValue);
+					}
+				});
+			}
+
 			return instance;
 		}
 	}, {
@@ -113,6 +134,15 @@ var Connection = function () {
 			_.into = collectionName;
 			this.parentLink[_.into] = this.parentLink[_.into] || [];
 			return this;
+		}
+	}, {
+		key: "inherit",
+		value: function inherit() {
+			for (var _len2 = arguments.length, parameterNames = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+				parameterNames[_key2] = arguments[_key2];
+			}
+
+			(0, _incognito2.default)(this).inherit = parameterNames;
 		}
 	}, {
 		key: "asProperty",

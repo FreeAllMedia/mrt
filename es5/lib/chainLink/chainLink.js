@@ -56,6 +56,7 @@ var ChainLink = function () {
 			if (parameterNames.length > 0) {
 				var parameterCollection = new _parameterCollection2.default(this, parameterNames);
 				_.parameterCollections.push(parameterCollection);
+
 				return parameterCollection;
 			} else {
 				var _ret = function () {

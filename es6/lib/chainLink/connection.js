@@ -1,4 +1,5 @@
 import privateData from "incognito";
+import inflect from "jargon";
 
 const addLink = Symbol();
 
@@ -6,6 +7,7 @@ export default class Connection {
 	constructor(parentLink, methodName, ChainLinkConstructor) {
 		const _ = privateData(this);
 
+		_.inherit = false;
 		_.into = false;
 
 		this.parentLink = parentLink;
@@ -74,6 +76,22 @@ export default class Connection {
 			}
 		}
 
+		if (_.inherit) {
+			const inheritedParameterNames = _.inherit;
+
+			inheritedParameterNames.forEach(parameterName => {
+				const capitalizedMethodName = inflect(parameterName).pascal.toString();
+				const getMethodName = `is${capitalizedMethodName}`;
+
+				if (this.parentLink.hasOwnProperty(getMethodName)) {
+					instance[parameterName];
+				} else {
+					const parameterValue = this.parentLink[parameterName]();
+					instance[parameterName](parameterValue);
+				}
+			});
+		}
+
 		return instance;
 	}
 
@@ -91,5 +109,9 @@ export default class Connection {
 			}
 		});
 		return this;
+	}
+
+	inherit(...parameterNames) {
+		privateData(this).inherit = parameterNames;
 	}
 }
