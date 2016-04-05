@@ -24,6 +24,7 @@ export default class ChainLink {
 		if (parameterNames.length > 0) {
 			const parameterCollection = new ParameterCollection(this, parameterNames);
 			_.parameterCollections.push(parameterCollection);
+
 			return parameterCollection;
 		} else {
 			let parameterValues = {};
