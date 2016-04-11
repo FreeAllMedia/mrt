@@ -16,6 +16,8 @@ var _jargon2 = _interopRequireDefault(_jargon);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var addLink = Symbol();
@@ -30,6 +32,7 @@ var Connection = function () {
 
 		_.inherit = false;
 		_.into = false;
+		_.parameters = [];
 
 		this.parentLink = parentLink;
 		this.methodName = methodName;
@@ -49,17 +52,32 @@ var Connection = function () {
 			return this;
 		}
 	}, {
+		key: "usingParameters",
+		value: function usingParameters() {
+			var _ = (0, _incognito2.default)(this);
+
+			for (var _len = arguments.length, parameters = Array(_len), _key = 0; _key < _len; _key++) {
+				parameters[_key] = arguments[_key];
+			}
+
+			_.parameters = Array.concat(_.parameters, parameters);
+		}
+	}, {
 		key: addLink,
 		value: function value() {
 			var _this2 = this;
 
-			var _ = (0, _incognito2.default)(this);
-
-			for (var _len = arguments.length, options = Array(_len), _key = 0; _key < _len; _key++) {
-				options[_key] = arguments[_key];
+			for (var _len2 = arguments.length, options = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+				options[_key2] = arguments[_key2];
 			}
 
-			var instance = new (Function.prototype.bind.apply(this.ChainLinkConstructor, [null].concat(options)))();
+			var _ = (0, _incognito2.default)(this);
+
+			if (_.parameters) {
+				options = Array.concat(_.parameters, options);
+			}
+
+			var instance = new (Function.prototype.bind.apply(this.ChainLinkConstructor, [null].concat(_toConsumableArray(options))))();
 
 			this.parentLink.links.all.forEach(function (link) {
 				var methodPropertyDescriptor = Object.getOwnPropertyDescriptor(_this2.parentLink, link.methodName);
@@ -138,8 +156,8 @@ var Connection = function () {
 	}, {
 		key: "inherit",
 		value: function inherit() {
-			for (var _len2 = arguments.length, parameterNames = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-				parameterNames[_key2] = arguments[_key2];
+			for (var _len3 = arguments.length, parameterNames = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+				parameterNames[_key3] = arguments[_key3];
 			}
 
 			(0, _incognito2.default)(this).inherit = parameterNames;
