@@ -30,6 +30,7 @@ export default class Connection {
 	usingArguments(...newArguments) {
 		const _ = privateData(this);
 		_.useArguments = Array.concat(_.useArguments, newArguments);
+		return this;
 	}
 
 	[addLink](...options) {

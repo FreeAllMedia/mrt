@@ -61,6 +61,7 @@ var Connection = function () {
 			}
 
 			_.useArguments = Array.concat(_.useArguments, newArguments);
+			return this;
 		}
 	}, {
 		key: addLink,
