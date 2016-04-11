@@ -2,7 +2,7 @@ import ChainLink from "../../lib/chainLink/chainLink.js";
 
 class Person extends ChainLink {
 	initialize() {
-		this.link("thought", Thought).usingParameters(this);
+		this.link("thought", Thought).usingArguments(this);
 	}
 }
 
@@ -12,7 +12,7 @@ class Thought extends ChainLink {
 	}
 }
 
-describe("chainLink.link.usingParameters", () => {
+describe("chainLink.link.usingArguments", () => {
 	let person,
 			thought;
 

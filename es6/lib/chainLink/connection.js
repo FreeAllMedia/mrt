@@ -9,7 +9,7 @@ export default class Connection {
 
 		_.inherit = false;
 		_.into = false;
-		_.parameters = [];
+		_.useArguments = [];
 
 		this.parentLink = parentLink;
 		this.methodName = methodName;
@@ -27,15 +27,15 @@ export default class Connection {
 		return this;
 	}
 
-	usingParameters(...parameters) {
+	usingArguments(...newArguments) {
 		const _ = privateData(this);
-		_.parameters = Array.concat(_.parameters, parameters);
+		_.useArguments = Array.concat(_.useArguments, newArguments);
 	}
 
 	[addLink](...options) {
 		const _ = privateData(this);
 
-		options = Array.concat(_.parameters, options);
+		options = Array.concat(_.useArguments, options);
 
 		const instance = new this.ChainLinkConstructor(...options);
 
