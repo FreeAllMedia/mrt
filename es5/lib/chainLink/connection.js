@@ -32,7 +32,7 @@ var Connection = function () {
 
 		_.inherit = false;
 		_.into = false;
-		_.parameters = [];
+		_.useArguments = [];
 
 		this.parentLink = parentLink;
 		this.methodName = methodName;
@@ -52,15 +52,15 @@ var Connection = function () {
 			return this;
 		}
 	}, {
-		key: "usingParameters",
-		value: function usingParameters() {
+		key: "usingArguments",
+		value: function usingArguments() {
 			var _ = (0, _incognito2.default)(this);
 
-			for (var _len = arguments.length, parameters = Array(_len), _key = 0; _key < _len; _key++) {
-				parameters[_key] = arguments[_key];
+			for (var _len = arguments.length, newArguments = Array(_len), _key = 0; _key < _len; _key++) {
+				newArguments[_key] = arguments[_key];
 			}
 
-			_.parameters = Array.concat(_.parameters, parameters);
+			_.useArguments = Array.concat(_.useArguments, newArguments);
 		}
 	}, {
 		key: addLink,
@@ -73,9 +73,7 @@ var Connection = function () {
 
 			var _ = (0, _incognito2.default)(this);
 
-			if (_.parameters) {
-				options = Array.concat(_.parameters, options);
-			}
+			options = Array.concat(_.useArguments, options);
 
 			var instance = new (Function.prototype.bind.apply(this.ChainLinkConstructor, [null].concat(_toConsumableArray(options))))();
 
