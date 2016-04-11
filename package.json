@@ -1,6 +1,6 @@
 {
   "name": "mrt",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Mrt makes creating simple and complex chained interfaces simple.",
   "main": "index.js",
   "scripts": {
