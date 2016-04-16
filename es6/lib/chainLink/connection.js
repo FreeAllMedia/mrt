@@ -64,7 +64,13 @@ export default class Connection {
 		}
 
 		if (_.into) {
-			const intoLink = this.parentLink[_.into];
+			let intoLink;
+
+			if (_.into.constructor === String) {
+				intoLink = this.parentLink[_.into];
+			} else {
+				intoLink = _.into;
+			}
 
 			if (_.keyName) {
 				if (intoLink.constructor === Array) {
@@ -76,6 +82,7 @@ export default class Connection {
 						const keyValue = intoObject.parameters()[_.keyName];
 						intoObjects[keyValue] = intoObject;
 					});
+
 					this.parentLink[_.into] = intoObjects;
 				} else {
 					const keyValue = instance.parameters()[_.keyName];
@@ -105,10 +112,18 @@ export default class Connection {
 		return instance;
 	}
 
-	into(collectionName) {
+	into(collectionNameOrContainer) {
 		const _ = privateData(this);
-		_.into = collectionName;
-		this.parentLink[_.into] = this.parentLink[_.into] || [];
+
+		if (collectionNameOrContainer.constructor === String) {
+			const collectionName = collectionNameOrContainer;
+			this.parentLink[collectionName] = this.parentLink[collectionName] || [];
+			_.into = collectionName;
+		} else {
+			const container = collectionNameOrContainer;
+			_.into = container;
+		}
+
 		return this;
 	}
 
@@ -118,6 +133,7 @@ export default class Connection {
 				return this[addLink]();
 			}
 		});
+
 		return this;
 	}
 

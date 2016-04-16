@@ -102,7 +102,13 @@ var Connection = function () {
 			}
 
 			if (_.into) {
-				var intoLink = this.parentLink[_.into];
+				var intoLink = void 0;
+
+				if (_.into.constructor === String) {
+					intoLink = this.parentLink[_.into];
+				} else {
+					intoLink = _.into;
+				}
 
 				if (_.keyName) {
 					if (intoLink.constructor === Array) {
@@ -115,6 +121,7 @@ var Connection = function () {
 								var keyValue = intoObject.parameters()[_.keyName];
 								intoObjects[keyValue] = intoObject;
 							});
+
 							_this2.parentLink[_.into] = intoObjects;
 						})();
 					} else {
@@ -146,10 +153,18 @@ var Connection = function () {
 		}
 	}, {
 		key: "into",
-		value: function into(collectionName) {
+		value: function into(collectionNameOrContainer) {
 			var _ = (0, _incognito2.default)(this);
-			_.into = collectionName;
-			this.parentLink[_.into] = this.parentLink[_.into] || [];
+
+			if (collectionNameOrContainer.constructor === String) {
+				var collectionName = collectionNameOrContainer;
+				this.parentLink[collectionName] = this.parentLink[collectionName] || [];
+				_.into = collectionName;
+			} else {
+				var container = collectionNameOrContainer;
+				_.into = container;
+			}
+
 			return this;
 		}
 	}, {
@@ -171,6 +186,7 @@ var Connection = function () {
 					return _this3[addLink]();
 				}
 			});
+
 			return this;
 		}
 	}]);
