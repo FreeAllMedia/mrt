@@ -149,6 +149,10 @@ var Connection = function () {
 				});
 			}
 
+			if (_.then) {
+				_.then(instance);
+			}
+
 			return instance;
 		}
 	}, {
@@ -166,6 +170,11 @@ var Connection = function () {
 			}
 
 			return this;
+		}
+	}, {
+		key: "then",
+		value: function then(thenFunction) {
+			(0, _incognito2.default)(this).then = thenFunction;
 		}
 	}, {
 		key: "inherit",
