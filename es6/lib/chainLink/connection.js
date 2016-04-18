@@ -109,6 +109,10 @@ export default class Connection {
 			});
 		}
 
+		if (_.then) {
+			_.then(instance);
+		}
+
 		return instance;
 	}
 
@@ -125,6 +129,10 @@ export default class Connection {
 		}
 
 		return this;
+	}
+
+	then(thenFunction) {
+		privateData(this).then = thenFunction;
 	}
 
 	get asProperty() {
