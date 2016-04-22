@@ -25,7 +25,7 @@ server
 
 **Complex multi-tiered chain:**
 
-You can also create complex chained interfaces involving many chains each with their own properties:
+You can also create complex chained interfaces involving many chains each with their own parameters:
 
 ``` javascript
 import Server from "server";
@@ -86,7 +86,7 @@ import ChainLink from "mrt";
 class Server extends ChainLink {}
 ```
 
-## Add Simple Properties
+## Add Simple Parameters
 
 `Mrt` can either use the default constructor, or a built-in alternate "constructor" called `.initialize()` which automatically calls `super()` for you. This conveniently avoids the "must call super() before this" error:
 
@@ -95,7 +95,7 @@ import ChainLink from "mrt";
 
 class Server extends ChainLink {
 	initialize(name) {
-		this.properties(
+		this.parameters(
 			"name",
 			"port",
 			"logTo"
@@ -116,29 +116,29 @@ server.port(); // 3030
 server.logTo(); // "./server.log"
 ```
 
-### Add Complex Properties
+### Add Complex Parameters
 
-In addition to adding simple properties with a single value, you can also add properties with multiple and aggregate values:
+In addition to adding simple parameters with a single value, you can also add parameters with multiple and aggregate values:
 
 ``` javascript
 import ChainLink from "mrt";
 
 class Person extends ChainLink {
 	initialize(name) {
-		this.properties("name");
+		this.parameters("name");
 
 		this.name(name);
 
-		this.properties("dead").asProperty;
+		this.parameters("dead").asProperty;
 
-		this.properties("thought")
+		this.parameters("thought")
 			.aggregate
 			.into("thoughts");
 
-		this.properties("placeOfOrigin")
+		this.parameters("placeOfOrigin")
 			.multiValue;
 
-		this.properties("placeVisited")
+		this.parameters("placeVisited")
 			.multiValue
 			.aggregate
 			.into("placesVisited");
@@ -178,7 +178,7 @@ import ChainLink from "mrt";
 
 class Monster extends ChainLink {
 	initialize(name) {
-		this.properties("name");
+		this.parameters("name");
 		this.name(name);
 
 		this.link("tentacle", Tentacle).into("tentacles");
@@ -189,7 +189,7 @@ class Monster extends ChainLink {
 
 class Tentacle extends ChainLink {
 	initialize(hitpoints) {
-		this.properties("hitpoints");
+		this.parameters("hitpoints");
 		this.hitpoints(hitpoints);
 
 		this.link("spike", Spike).into("spikes").asProperty;
