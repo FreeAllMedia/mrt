@@ -126,22 +126,19 @@ import ChainLink from "mrt";
 class Person extends ChainLink {
 	initialize(name) {
 		this.parameters("name");
-
 		this.name(name);
 
 		this.parameters("dead").asProperty;
 
-		this.parameters("thought")
-			.aggregate
-			.into("thoughts");
+		this.parameters("favoriteCities")
+			.aggregate;
 
 		this.parameters("placeOfOrigin")
 			.multiValue;
 
-		this.parameters("placeVisited")
+		this.parameters("placesVisited")
 			.multiValue
-			.aggregate
-			.into("placesVisited");
+			.aggregate;
 	}
 }
 
