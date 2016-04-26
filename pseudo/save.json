@@ -1,0 +1,93 @@
+{
+	"plugins": ["streamerbot-twitch"],
+	"twitch": [
+		{
+			"arguments": ["bot1", "something"],
+			"parameters": {
+				"reconnect": true,
+				"username": "Bob",
+				"password": "asdassdv089u23f09jwp4v9",
+				"channels": [
+					"#AutomateAllTheThings"
+				]
+			}
+		},
+
+		{
+			"arguments": ["bot2", "something"],
+			"parameters": {
+				"reconnect": true,
+				"username": "Tom",
+				"password": "asdjklng9023in",
+				"channels": [
+					"#AutomateAllTheThings"
+				]
+			}
+		}
+	],
+
+	"arcade": {
+		"parameters": {
+			"creditAmount": 1,
+			"creditFrequency": 60,
+			"creditName": "ticket"
+		}
+	},
+
+	"spotify": {
+		"parameters": {
+			"voteSkip": {
+				"votesRequired": 3
+			},
+
+			"songRequests": {
+				"creditCostPerMinute": 1,
+				"whitelistedPlaylists": "1fm7mdOoADMy0508dlNbGE",
+				"maximumSongDuration": 10
+			}
+		}
+	}
+}
+
+streamerBot
+	.plugins(Twitch)
+
+	.twitch("bot1", "something")
+		.reconnect(true)
+		.username()
+		.password()
+		.channels("#AutomateAllTheThings")
+
+	.twitch("bot2")
+		.reconnect(true)
+		.username()
+		.password()
+		.channels("#AutomateAllTheThings")
+
+	.arcade
+		.creditAmount(1)
+		.creditFrequency(60)
+		.creditName("ticket")
+
+	.spotify
+		.voteSkip
+			.votesRequired(3)
+		.songRequests
+			.creditCostPerMinute(1)
+		.whitelistedPlaylists("1fm7mdOoADMy0508dlNbGE")
+		.maximumSongDuration(10)
+
+	.itunes
+		.voteSkip(true, 3)
+		.songRequest(true)
+			.creditCostPerMinute(1)
+		.maximumSongDuration(5.5)
+		.whitelistedPlaylists("Licensed Music")
+
+	.onAll((chatMessage, userName) => {
+		console.log(`${userName} said, "${chatMessage}"`);
+	})
+
+	.connect(error => {
+		if (error) { throw error; }
+	});

@@ -13,11 +13,11 @@ var _incognito = require("incognito");
 
 var _incognito2 = _interopRequireDefault(_incognito);
 
-var _parameterCollection = require("./parameterCollection.js");
+var _parameterCollection = require("../parameterCollection/parameterCollection.js");
 
 var _parameterCollection2 = _interopRequireDefault(_parameterCollection);
 
-var _connection = require("./connection.js");
+var _connection = require("../connection/connection.js");
 
 var _connection2 = _interopRequireDefault(_connection);
 
@@ -37,6 +37,8 @@ var ChainLink = function () {
 		this.links = {
 			all: []
 		};
+
+		this.connections = [];
 
 		this.initialize.apply(this, arguments);
 	}
@@ -78,8 +80,13 @@ var ChainLink = function () {
 		key: "link",
 		value: function link(methodName, LinkConstructor) {
 			var newLink = new _connection2.default(this, methodName, LinkConstructor);
-			this.links.all.push(newLink);
+			this.connections.push(newLink);
 			return newLink;
+		}
+	}, {
+		key: "serialize",
+		value: function serialize() {
+			return require("./chainLink.serialize.js").default.call(this);
 		}
 	}]);
 

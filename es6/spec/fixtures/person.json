@@ -1,0 +1,24 @@
+{
+	"name": "Bob",
+	"head": {},
+	"arm": {
+		"left": {
+			"hand": {
+				"digitCount": 5
+			}
+		},
+		"right": {
+			"hand": {
+				"digitCount": 5
+			}
+		}
+	},
+	"thought": [
+		{
+			"description": "I'm alive!"
+		},
+		{
+			"description": "I'm hungry!"
+		}
+	]
+}

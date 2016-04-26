@@ -19,6 +19,9 @@ export default class Connection {
 			return this[addLink](...options);
 		};
 
+		// TODO: Gotta figure out this line
+		// this.link = parentLink.link.bind(parentLink);
+
 		this.parentLink[this.methodName] = this.method;
 	}
 
@@ -40,57 +43,60 @@ export default class Connection {
 
 		const instance = new this.ChainLinkConstructor(...options);
 
-		this.parentLink.links.all.forEach(link => {
-			const methodPropertyDescriptor = Object.getOwnPropertyDescriptor(this.parentLink, link.methodName);
+		this.parentLink.connections.forEach(connection => {
+			const methodPropertyDescriptor = Object.getOwnPropertyDescriptor(this.parentLink, connection.methodName);
+
 			if (methodPropertyDescriptor.get && !methodPropertyDescriptor.set) {
-				Object.defineProperty(instance, link.methodName, {
-					get: link.method
-				});
+				instance.link(connection.methodName, connection.ChainLinkConstructor).asProperty;
 			} else {
-				instance[link.methodName] = link.method;
+				instance.link(connection.methodName, connection.ChainLinkConstructor);
 			}
 		});
 
-		if (_.keyName) {
-			const methodLinks = this.parentLink.links[this.methodName] = this.parentLink.links[this.methodName] || {};
-
-			const parameterValues = instance.parameters();
-			const keyValue = parameterValues[_.keyName];
-
-			methodLinks[keyValue] = instance;
-		} else {
-			const methodLinks = this.parentLink.links[this.methodName] = this.parentLink.links[this.methodName] || [];
-			methodLinks.push(instance);
-		}
-
-		if (_.into) {
-			let intoLink;
-
-			if (_.into.constructor === String) {
-				intoLink = this.parentLink[_.into];
-			} else {
-				intoLink = _.into;
-			}
-
+		if (_.keyName || _.into) {
 			if (_.keyName) {
-				if (intoLink.constructor === Array) {
-					intoLink.push(instance);
+				const methodLinks = this.parentLink.links[this.methodName] = this.parentLink.links[this.methodName] || {};
 
-					let intoObjects = {};
+				const parameterValues = instance.parameters();
+				const keyValue = parameterValues[_.keyName];
 
-					intoLink.forEach(intoObject => {
-						const keyValue = intoObject.parameters()[_.keyName];
-						intoObjects[keyValue] = intoObject;
-					});
-
-					this.parentLink[_.into] = intoObjects;
-				} else {
-					const keyValue = instance.parameters()[_.keyName];
-					intoLink[keyValue] = instance;
-				}
+				methodLinks[keyValue] = instance;
 			} else {
-				intoLink.push(instance);
+				const methodLinks = this.parentLink.links[this.methodName] = this.parentLink.links[this.methodName] || [];
+				methodLinks.push(instance);
 			}
+
+			if (_.into) {
+				let intoLink;
+
+				if (_.into.constructor === String) {
+					intoLink = this.parentLink[_.into];
+				} else {
+					intoLink = _.into;
+				}
+
+				if (_.keyName) {
+					if (intoLink.constructor === Array) {
+						intoLink.push(instance);
+
+						let intoObjects = {};
+
+						intoLink.forEach(intoObject => {
+							const keyValue = intoObject.parameters()[_.keyName];
+							intoObjects[keyValue] = intoObject;
+						});
+
+						this.parentLink[_.into] = intoObjects;
+					} else {
+						const keyValue = instance.parameters()[_.keyName];
+						intoLink[keyValue] = instance;
+					}
+				} else {
+					intoLink.push(instance);
+				}
+			}
+		} else {
+			this.parentLink.links[this.methodName] = instance;
 		}
 
 		if (_.inherit) {
@@ -112,6 +118,8 @@ export default class Connection {
 		if (_.then) {
 			_.then(instance);
 		}
+
+		this.parentLink.links.all.push(instance);
 
 		return instance;
 	}
