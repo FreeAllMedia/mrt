@@ -1,7 +1,6 @@
 import privateData from "incognito";
 
 import ParameterCollection from "../parameterCollection/parameterCollection.js";
-import Connection from "../connection/connection.js";
 
 export { ParameterCollection };
 
@@ -22,28 +21,11 @@ export default class ChainLink {
 	initialize() {}
 
 	parameters(...parameterNames) {
-		const _ = privateData(this);
-
-		if (parameterNames.length > 0) {
-			const parameterCollection = new ParameterCollection(this, parameterNames);
-			_.parameterCollections.push(parameterCollection);
-
-			return parameterCollection;
-		} else {
-			let parameterValues = {};
-
-			_.parameterCollections.forEach(parameterCollection => {
-				parameterValues = Object.assign(parameterValues, parameterCollection.parameters);
-			});
-
-			return parameterValues;
-		}
+		return require("./chainLink.parameters.js").default.call(this, ...parameterNames);
 	}
 
 	link(methodName, LinkConstructor) {
-		const newLink = new Connection(this, methodName, LinkConstructor);
-		this.connections.push(newLink);
-		return newLink;
+		return require("./chainLink.link.js").default.call(this, methodName, LinkConstructor);
 	}
 
 	serialize() {

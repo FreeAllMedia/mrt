@@ -12,7 +12,7 @@ describe("chainLink.serialize()", () => {
 		person
 			.name("Bob")
 			.arm("left")
-				.hand()
+				.hand(5)
 			.arm("right")
 				.hand(4);
 

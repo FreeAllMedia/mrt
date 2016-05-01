@@ -8,6 +8,6 @@ describe("chainLink.connections", () => {
 	});
 
 	it("should aggregate all connections", () => {
-		person.connections.length.should.eql(2);
+		person.connections.length.should.eql(3);
 	});
 });

@@ -30,14 +30,13 @@ class SerializeLink {
 
 		const connectionNameMap = this.generateConnectionNameMap(link);
 
-		console.log("links", links);
+		console.log("links", links.map(link => { return link.constructor.name; }));
 
 		links.forEach(childLink => {
-			console.log("childLink", childLink);
+			const connection = connectionNameMap[childLink.constructor];
 
-			const connectionName = connectionNameMap[childLink.constructor];
-			console.log("connectionName", connectionName);
-			json[connectionName] = {};
+
+
 		});
 	}
 
@@ -46,7 +45,7 @@ class SerializeLink {
 
 		const connectionNameMap = {};
 		connections.forEach(connection => {
-			connectionNameMap[connection.ChainLinkConstructor] = connection.methodName;
+			connectionNameMap[connection.ChainLinkConstructor] = connection;
 		});
 
 		return connectionNameMap;

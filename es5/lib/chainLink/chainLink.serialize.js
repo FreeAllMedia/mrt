@@ -48,14 +48,12 @@ var SerializeLink = function () {
 
 			var connectionNameMap = this.generateConnectionNameMap(link);
 
-			console.log("links", links);
+			console.log("links", links.map(function (link) {
+				return link.constructor.name;
+			}));
 
 			links.forEach(function (childLink) {
-				console.log("childLink", childLink);
-
-				var connectionName = connectionNameMap[childLink.constructor];
-				console.log("connectionName", connectionName);
-				json[connectionName] = {};
+				var connection = connectionNameMap[childLink.constructor];
 			});
 		}
 	}, {
@@ -65,7 +63,7 @@ var SerializeLink = function () {
 
 			var connectionNameMap = {};
 			connections.forEach(function (connection) {
-				connectionNameMap[connection.ChainLinkConstructor] = connection.methodName;
+				connectionNameMap[connection.ChainLinkConstructor] = connection;
 			});
 
 			return connectionNameMap;

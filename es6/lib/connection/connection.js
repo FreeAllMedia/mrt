@@ -19,10 +19,11 @@ export default class Connection {
 			return this[addLink](...options);
 		};
 
-		// TODO: Gotta figure out this line
-		// this.link = parentLink.link.bind(parentLink);
-
 		this.parentLink[this.methodName] = this.method;
+	}
+
+	link(methodName, LinkConstructor) {
+		return this.parentLink.link.call(this.parentLink, methodName, LinkConstructor);
 	}
 
 	usingKey(keyName) {

@@ -42,13 +42,15 @@ var Connection = function () {
 			return _this[addLink].apply(_this, arguments);
 		};
 
-		// TODO: Gotta figure out this line
-		// this.link = parentLink.link.bind(parentLink);
-
 		this.parentLink[this.methodName] = this.method;
 	}
 
 	_createClass(Connection, [{
+		key: "link",
+		value: function link(methodName, LinkConstructor) {
+			return this.parentLink.link.call(this.parentLink, methodName, LinkConstructor);
+		}
+	}, {
 		key: "usingKey",
 		value: function usingKey(keyName) {
 			(0, _incognito2.default)(this).keyName = keyName;
