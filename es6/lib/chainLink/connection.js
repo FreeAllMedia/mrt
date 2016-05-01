@@ -29,14 +29,14 @@ export default class Connection {
 
 	usingArguments(...newArguments) {
 		const _ = privateData(this);
-		_.useArguments = Array.concat(_.useArguments, newArguments);
+		_.useArguments = _.useArguments.concat(newArguments);
 		return this;
 	}
 
 	[addLink](...options) {
 		const _ = privateData(this);
 
-		options = Array.concat(_.useArguments, options);
+		options = _.useArguments.concat(options);
 
 		const instance = new this.ChainLinkConstructor(...options);
 
