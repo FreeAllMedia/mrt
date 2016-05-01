@@ -60,7 +60,7 @@ var Connection = function () {
 				newArguments[_key] = arguments[_key];
 			}
 
-			_.useArguments = Array.concat(_.useArguments, newArguments);
+			_.useArguments = _.useArguments.concat(newArguments);
 			return this;
 		}
 	}, {
@@ -74,7 +74,7 @@ var Connection = function () {
 
 			var _ = (0, _incognito2.default)(this);
 
-			options = Array.concat(_.useArguments, options);
+			options = _.useArguments.concat(options);
 
 			var instance = new (Function.prototype.bind.apply(this.ChainLinkConstructor, [null].concat(_toConsumableArray(options))))();
 
