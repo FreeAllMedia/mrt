@@ -1,5 +1,6 @@
 language: node_js
 node_js:
+- '6'
 - '5'
 - '4'
 - '0.12'
@@ -17,10 +18,13 @@ before_script:
 - npm install
 after_success:
 - ./node_modules/coveralls/bin/coveralls.js < ./lcov.info
+addons:
+  sauce_connect: true
 branches:
   only:
-    - master
-    - develop
-#addons:
-#  code_climate:
-#    repo_token: 18c3ab76d6a7293eb6538ebc315dfea5170289a57017b8857dc0b89012d5ff40
+  - master
+  - develop
+env:
+  global:
+  - secure: CT6F6CWDgemiTDb6rKk8694AY6vW96ldJyB6JneKppr7FrPoNBSyVEyTRAxwr6KBdRERClJqKknZtsUnx7AFqV8WraDpAZXJK7WNy7NLcpEGGkTtR1AzjgUoaPmyZQxxUgw9UGgLCthKFIx+xSdEmsw8TNI6KLc7oHodsCDMIzow1zfw/04j1LkkWhVniIOyd0iDIzvWW/jqsJGyB7l3UBTVeOho4GMqPQLNukCzm1UZn+Ysk/9qZa/JMg4llnk4LUlNXOlJlZpPp7VgcJiLxAvFqr8iAz9K96w0Os7c2mtD7EoywiTy6gBsPhrfZ5rSZmv6tS6CK7lqE9jMxNphJiEkAUF7QMSEl/i381iOEzBVmEo+tolZaRKyzPSMEB/DouyLa2IGstGQh4lDq+lwNyBkBqB0jMWb9pRt2lca+HN/XNF4V6hozLM6eF5HX6hcEL9ApxehEP64fuPHLHKghz+2UAHrsyG5SoriS5Ktcz3Kcm3P+y2/WVyjFqTzLlVkvB2XKPpr6Qih0lehInuUY+xcQVks7MKM0D1ibg54BLITxSITS7/+ONQY1KeBh5Xo8pdG5VMmhAV979bB/lY09deu2CuGMjCPjTbgWJh7wQN0miFgMyl7M0dIqHcxwvj5l/UXymvBaktg2xPAVH120Nz8TjZNogxgxZq042s6cTk=
+  - secure: H74G0W8MVWM/92bVTiRvXEpIXP+Js3jyG33tS0dZ/eAVaN26sTS4jQY4hDiEwG+AOuPxM594AveTQu0vzgaTdz5PaB6wqqP4bswjr/esnn3dGKPnYfmpRz/PbubndCUCrFDmN0CoEmorxtgBeecxJ3Jv92zzPniJJqBhoIra+o0CXKaG4s12IlA93P1gp6+MMpORFjM4bXgp6h0V6F4w6k7MhDvQBwmYdseapUszqbsRe36YAQtbh5ArcJWW+rhB+idjzMWlDZPtHJ2DqfXkEZ4ju+exm1CLukihwpct+1NkN9u/zPQsgxjIYPyTtrvhv0wHELU93h8V4rOPjrAg+dMGMGxfxMr0fou+kv0HAnOFz6tPH4C/VMxAoLh2kMl4oQ2s5EkJMEcD0LsetZuQNHDVEh21/+BEdKh5WfvAjt4Jcc4Z/Lbw6W3TOebZwQKL5MK4uqRHQn66vRfEPzhnOu+8G9I4B6gANgwKZaDm3nHgKwe4nv4zO4XIjX2XWhXbxoTTda9Qa6/JPBHVIWccrrmRkv/TE79BZHBbY5USoRpWszUrSMW0mG1IqeFPLS6QY9ZSJlrU+waJqQNH4Ka8sF3VxtJeCMbNIsrEGRbYpOePFr4P25CyDWkM/Su4Top9K8Pd50hBwsCQ3JKVlQ+pQOssF2oOTas5MgSOUVj8WsM=

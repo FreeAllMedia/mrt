@@ -1,14 +1,8 @@
-# Mrt
+# MRT [![npm version](https://img.shields.io/npm/v/mrt.svg)](https://www.npmjs.com/package/mrt) [![license type](https://img.shields.io/npm/l/mrt.svg)](https://github.com/FreeAllMedia/mrt.git/blob/master/LICENSE)  [![Build Status](https://travis-ci.org/FreeAllMedia/mrt.png?branch=master)](https://travis-ci.org/FreeAllMedia/mrt) [![Coverage Status](https://coveralls.io/repos/github/FreeAllMedia/mrt/badge.svg?branch=master)](https://coveralls.io/github/FreeAllMedia/mrt?branch=master) [![Code Climate](https://codeclimate.com/github/FreeAllMedia/mrt/badges/gpa.svg)](https://codeclimate.com/github/FreeAllMedia/mrt) [![bitHound Score](https://www.bithound.io/github/FreeAllMedia/mrt/badges/score.svg)](https://www.bithound.io/github/FreeAllMedia/mrt) [![Dependency Status](https://david-dm.org/FreeAllMedia/mrt.png?theme=shields.io)](https://david-dm.org/FreeAllMedia/mrt?theme=shields.io) [![Dev Dependency Status](https://david-dm.org/FreeAllMedia/mrt/dev-status.svg)](https://david-dm.org/FreeAllMedia/mrt?theme=shields.io#info=devDependencies) [![npm downloads](https://img.shields.io/npm/dm/mrt.svg)](https://www.npmjs.com/package/mrt) ![Source: ECMAScript 6](https://img.shields.io/badge/Source-ECMAScript_2015-green.svg)
 
-[![npm version](https://img.shields.io/npm/v/mrt.svg)](https://www.npmjs.com/package/mrt) [![license type](https://img.shields.io/npm/l/mrt.svg)](https://github.com/FreeAllMedia/mrt.git/blob/master/LICENSE) [![npm downloads](https://img.shields.io/npm/dm/mrt.svg)](https://www.npmjs.com/package/mrt) ![Source: ECMAScript 6](https://img.shields.io/badge/Source-ECMAScript_2015-green.svg)
-[![Build Status](https://travis-ci.org/FreeAllMedia/mrt.png?branch=master)](https://travis-ci.org/FreeAllMedia/mrt) [![Coverage Status](https://coveralls.io/repos/github/FreeAllMedia/mrt/badge.svg?branch=master)](https://coveralls.io/github/FreeAllMedia/mrt?branch=master) [![Code Climate](https://codeclimate.com/github/FreeAllMedia/mrt/badges/gpa.svg)](https://codeclimate.com/github/FreeAllMedia/mrt) [![bitHound Score](https://www.bithound.io/github/FreeAllMedia/mrt/badges/score.svg)](https://www.bithound.io/github/FreeAllMedia/mrt) [![Dependency Status](https://david-dm.org/FreeAllMedia/mrt.png?theme=shields.io)](https://david-dm.org/FreeAllMedia/mrt?theme=shields.io) [![Dev Dependency Status](https://david-dm.org/FreeAllMedia/mrt/dev-status.svg)](https://david-dm.org/FreeAllMedia/mrt?theme=shields.io#info=devDependencies)
-![node 5.x.x](https://img.shields.io/badge/node-5.x.x-brightgreen.svg) ![node 4.x.x](https://img.shields.io/badge/node-4.x.x-brightgreen.svg) ![node 0.12.x](https://img.shields.io/badge/node-0.12.x-brightgreen.svg) ![node 0.11.x](https://img.shields.io/badge/node-0.11.x-brightgreen.svg) ![node 0.10.x](https://img.shields.io/badge/node-0.10.x-brightgreen.svg) ![iojs 2.x.x](https://img.shields.io/badge/iojs-2.x.x-brightgreen.svg) ![iojs 1.x.x](https://img.shields.io/badge/iojs-1.x.x-brightgreen.svg)
+MRT assists you in rapidly developing highly-readable chained interfaces for your own libraries.
 
-Mrt makes chaining easy! Use it to create simple or complex chained interfaces for your own libraries!
-
-**Simple chain:**
-
-You can create simple interfaces for your libraries using Mrt:
+**Simple chained interfaces:**
 
 ``` javascript
 import Server from "server";
@@ -23,9 +17,7 @@ server
 	});
 ```
 
-**Complex multi-tiered chain:**
-
-You can also create complex chained interfaces involving many chains each with their own parameters:
+**Complex multi-tier chained interfaces:**
 
 ``` javascript
 import Server from "server";
@@ -52,21 +44,29 @@ server
 				.action(accountController.delete);
 ```
 
-# Getting Started
+# Getting Started With MRT
 
 ## Installation
 
-The easiest and fastest way to install Mrt is through the `node package manager`:
+The easiest and fastest way to install MRT is through the `node package manager`:
 
 ``` shell
 $ npm install mrt --save
 ```
 
-# Creating a Simple Chain
+## Create a Simple Chain
 
-## Inherit Mrt's ChainLink
+### Inherit MRT's ChainLink
 
-To use Mrt, create a constructor function that inherits from Mrt's `ChainLink`. This is done in two different ways depending on whether you're using ES5 or ES6+:
+To use MRT, create a constructor that inherits from MRT's `ChainLink`. This is done in two different ways depending on whether you're using `ES5` or `ES6+`:
+
+**ES6 Example:**
+
+``` javascript
+import ChainLink from "mrt";
+
+class Server extends ChainLink {}
+```
 
 **ES5 Example:**
 
@@ -78,19 +78,13 @@ function Server() {}
 Server.prototype = Object.create(ChainLink.prototype);
 ```
 
-**ES6 Example:**
+### Add Simple Parameters
+
+MRT can either use the default constructor, or a built-in alternate "constructor" called `.initialize()` which automatically calls `super()` for you. This conveniently avoids the "must call super() before this" error:
 
 ``` javascript
-import ChainLink from "mrt";
+// server.js
 
-class Server extends ChainLink {}
-```
-
-## Add Simple Parameters
-
-`Mrt` can either use the default constructor, or a built-in alternate "constructor" called `.initialize()` which automatically calls `super()` for you. This conveniently avoids the "must call super() before this" error:
-
-``` javascript
 import ChainLink from "mrt";
 
 class Server extends ChainLink {
@@ -103,22 +97,44 @@ class Server extends ChainLink {
 
 		this.name(name);
 	}
+
+	listen(serverListening) {
+		// Start server listening on specified port
+		return this;
+	}
+
+	close(serverClosed) {
+		// Stop the server from listening for requests
+		return this;
+	}
 }
+```
+
+This makes the following interface available:
+
+``` javascript
+// app.js
+
+import Server from "./server.js";
 
 const server = new Server("My Server");
 
 server
 	.port(3030)
-	.logTo("./server.log");
+	.logTo("./server.log")
+	.listen(() => {
+		// Server is now listening
+	});
 
-server.name(); // "My Server"
-server.port(); // 3030
-server.logTo(); // "./server.log"
+server
+	.close(() => {
+		// Server has stopped listening
+	});
 ```
 
-### Add Complex Parameters
+#### Add Complex Parameters
 
-In addition to adding simple parameters with a single value, you can also add parameters with multiple and aggregate values:
+Parameters can also be setup to have multiple and aggregate values:
 
 ``` javascript
 import ChainLink from "mrt";
@@ -141,7 +157,11 @@ class Person extends ChainLink {
 			.aggregate;
 	}
 }
+```
 
+This creates the following interface:
+
+``` javascript
 const person = new Person("Lex Luthor");
 
 person.isDead; // false
@@ -166,8 +186,6 @@ person.thoughts; // ["Superman is a real jerk!", "Darn you Batman!", "Does this 
 
 # Creating Complex Chains
 
-## Add Chain Links
-
 A `ChainLink` can `.link()` to another `ChainLink` to form complex multi-tiered chained interfaces:
 
 ``` javascript
@@ -176,11 +194,15 @@ import ChainLink from "mrt";
 class Monster extends ChainLink {
 	initialize(name) {
 		this.parameters("name");
+
 		this.name(name);
 
-		this.link("tentacle", Tentacle).into("tentacles");
-
-		this.link("eye", Eye).into("eyes").asProperty;
+		this
+			.link("tentacle", Tentacle)
+				.into("tentacles")
+			.link("eye", Eye)
+				.into("eyes")
+				.asProperty;
 	}
 }
 
@@ -197,6 +219,11 @@ class Spike extends ChainLink {}
 
 class Eye extends ChainLink {}
 
+```
+
+This produces the following multi-tiered interface:
+
+``` javascript
 const monster = new Monster("Zig Zug");
 
 monster
@@ -221,9 +248,9 @@ firstTentacle.hitpoints(); // 10
 firstTentacle.spikes.length; // 6
 ```
 
-## Add Behavior
+### Custom Behavior
 
-Mrt isn't just about creating data structures (though you can certainly use it for only that purpose!). You can also add custom behavior to `ChainLinks` by adding methods the way you normally would:
+MRT isn't just about creating data structures (though you can certainly use it for only that purpose!). It is also possible to add custom behavior to `ChainLinks` by adding methods the way you normally would:
 
 ``` javascript
 import ChainLink from "mrt";
@@ -233,15 +260,20 @@ class Vehicle extends ChainLink {
 		this.parameters("type", "make", "model", "color");
 
 		this.type("vehicle");
-		this.link("wheel", Wheel).into("wheels");
+
+		this
+			.link("wheel", Wheel)
+				.into("wheels");
 	}
 
 	start() {
 		console.log(`Vroom! Vroom! The ${this.type} has started!`)
+		return this;
 	}
 
 	get honk() {
 		console.log("This vehicle is unfortunately not equipped with a horn.");
+		return this;
 	}
 }
 
@@ -266,6 +298,7 @@ class Car extends Vehicle {
 
 	get honk() {
 		console.log("Honk! Honk!");
+		return this;
 	}
 }
 
@@ -281,24 +314,33 @@ class Motorcycle extends Vehicle {
 
 	get honk() {
 		console.log("Meep! Meep!");
+		return this;
 	}
 }
+```
 
+Now you can call custom methods
+
+``` javascript
 const car = new Car();
 car
 	.make("Volkswagen")
 	.model("Golf")
-	.color("green");
-
-car.start(); // "Vroom! Vroom! The car has started!"
-car.honk; // "Honk! Honk!"
+	.color("green")
+	.start() // "Vroom! Vroom! The car has started!"
+	.honk; // "Honk! Honk!"
 
 const motorcycle = new Motorcycle();
 motorcycle
 	.make("Kawasaki")
 	.model("Ninja")
-	.color("black");
-
-motorcycle.start(); // "Vroom! Vroom! The motorcycle has started!"
-motorcycle.honk; // "Meep! Meep!"
+	.color("black")
+	.start() // "Vroom! Vroom! The motorcycle has started!"
+	.honk; // "Meep! Meep!"
 ```
+
+# Compatibility
+
+MRT is automatically tested to be compatible with the following platforms:
+
+![node 6](https://img.shields.io/badge/node-6-brightgreen.svg) ![node 5](https://img.shields.io/badge/node-5-brightgreen.svg) ![node 4](https://img.shields.io/badge/node-4-brightgreen.svg) ![iojs 3](https://img.shields.io/badge/iojs-3-brightgreen.svg) ![iojs 2](https://img.shields.io/badge/iojs-2-brightgreen.svg) ![iojs 1](https://img.shields.io/badge/iojs-1-brightgreen.svg) ![node 0.12](https://img.shields.io/badge/node-0.12-brightgreen.svg) ![node 0.11](https://img.shields.io/badge/node-0.11-brightgreen.svg) ![node 0.10](https://img.shields.io/badge/node-0.10-brightgreen.svg)
