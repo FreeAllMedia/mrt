@@ -2,8 +2,7 @@
 	"source": {
 		"all": "./es6/**/*.*",
 		"lib": [
-			"./es6/lib/**/*.js",
-			"./es6/*.js"
+			"./es6/**/*.js"
 		],
 		"spec": "./es6/spec/**/*.js"
 	},
