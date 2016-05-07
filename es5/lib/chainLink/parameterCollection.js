@@ -48,12 +48,6 @@ var ParameterCollection = function () {
 					}
 
 					if (_.aggregate || _.multiValue) {
-						if (!_this.parameters[parameterName]) {
-							_this.parameters[parameterName] = [];
-						}
-					}
-
-					if (_.aggregate || _.multiValue) {
 						if (_.aggregate) {
 							_this.parameters[parameterName].push(newValue);
 						} else {
@@ -73,7 +67,13 @@ var ParameterCollection = function () {
 	_createClass(ParameterCollection, [{
 		key: "aggregate",
 		get: function get() {
-			(0, _incognito2.default)(this).aggregate = true;
+			var _this2 = this;
+
+			var _ = (0, _incognito2.default)(this);
+			_.aggregate = true;
+			_.parameterNames.forEach(function (parameterName) {
+				_this2.parameters[parameterName] = [];
+			});
 			return this;
 		}
 	}, {
