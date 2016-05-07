@@ -40,6 +40,20 @@ export default class Connection {
 
 		const instance = new this.ChainLinkConstructor(...options);
 
+		const propertyNames = Object.getOwnPropertyNames(this.parentLink.constructor.prototype).filter(propertyName => {
+			switch (propertyName) {
+				case "constructor":
+				case "initialize":
+					return false;
+				default:
+					return true;
+			}
+		});
+
+		propertyNames.forEach(propertyName => {
+			instance[propertyName] = this.parentLink[propertyName];
+		});
+
 		this.parentLink.links.all.forEach(link => {
 			const methodPropertyDescriptor = Object.getOwnPropertyDescriptor(this.parentLink, link.methodName);
 			if (methodPropertyDescriptor.get && !methodPropertyDescriptor.set) {

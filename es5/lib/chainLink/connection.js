@@ -78,6 +78,22 @@ var Connection = function () {
 
 			var instance = new (Function.prototype.bind.apply(this.ChainLinkConstructor, [null].concat(_toConsumableArray(options))))();
 
+			var propertyNames = Object.getOwnPropertyNames(this.parentLink.constructor.prototype).filter(function (propertyName) {
+				switch (propertyName) {
+					case "constructor":
+					case "initialize":
+						return false;
+					default:
+						return true;
+				}
+			});
+
+			//console.log("propertyNames", propertyNames);
+
+			propertyNames.forEach(function (propertyName) {
+				instance[propertyName] = _this2.parentLink[propertyName];
+			});
+
 			this.parentLink.links.all.forEach(function (link) {
 				var methodPropertyDescriptor = Object.getOwnPropertyDescriptor(_this2.parentLink, link.methodName);
 				if (methodPropertyDescriptor.get && !methodPropertyDescriptor.set) {
