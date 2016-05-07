@@ -23,10 +23,6 @@ export default class ParameterCollection {
 					}
 
 					if (_.aggregate || _.multiValue) {
-						if (!this.parameters[parameterName]) { this.parameters[parameterName] = []; }
-					}
-
-					if (_.aggregate || _.multiValue) {
 						if (_.aggregate) {
 							this.parameters[parameterName].push(newValue);
 						} else {
@@ -44,7 +40,11 @@ export default class ParameterCollection {
 	}
 
 	get aggregate() {
-		privateData(this).aggregate = true;
+		const _ = privateData(this);
+		_.aggregate = true;
+		_.parameterNames.forEach(parameterName => {
+			this.parameters[parameterName] = [];
+		});
 		return this;
 	}
 

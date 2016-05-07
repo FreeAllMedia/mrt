@@ -40,6 +40,10 @@ describe(".parameters.aggregate", function () {
 		person = new Person();
 	});
 
+	it("should be set to an empty array by default", function () {
+		person.nickNames().should.eql([]);
+	});
+
 	it("should return this to enable chaining after setting a value", function () {
 		person.nickNames("The Big Bob").should.equal(person);
 	});
