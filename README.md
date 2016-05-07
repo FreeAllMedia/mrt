@@ -344,3 +344,5 @@ motorcycle
 MRT is automatically tested to be compatible with the following platforms:
 
 ![node 6](https://img.shields.io/badge/node-6-brightgreen.svg) ![node 5](https://img.shields.io/badge/node-5-brightgreen.svg) ![node 4](https://img.shields.io/badge/node-4-brightgreen.svg) ![iojs 3](https://img.shields.io/badge/iojs-3-brightgreen.svg) ![iojs 2](https://img.shields.io/badge/iojs-2-brightgreen.svg) ![iojs 1](https://img.shields.io/badge/iojs-1-brightgreen.svg) ![node 0.12](https://img.shields.io/badge/node-0.12-brightgreen.svg) ![node 0.11](https://img.shields.io/badge/node-0.11-brightgreen.svg) ![node 0.10](https://img.shields.io/badge/node-0.10-brightgreen.svg)
+
+[![Sauce Test Status](https://saucelabs.com/buildstatus/fam-mrt)](https://saucelabs.com/u/fam-mrt)

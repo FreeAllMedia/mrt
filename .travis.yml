@@ -20,6 +20,14 @@ after_success:
 - ./node_modules/coveralls/bin/coveralls.js < ./lcov.info
 addons:
   sauce_connect: true
+deploy:
+  provider: npm
+  email: fam-operations@freeallmedia.com
+  api_key:
+    secure: akbPeWLplsfcJMGNROA0wZwHEAtBzvpf9CN7QW7HSD59sv5FR8QYQyQr75jQvyrXSmgzHkQ5iqlC5L/iNlmYKSEaTmtTRj7VEIGtClHP/ykYlVDXOcHpxcxCwr/kXLDDgXLrRCKYI9YL36lH6+cI2qCVn6ujPcpuv91jrWcgaEZqHlYiaqLXG3aPz5Yj3TGgMPUXCWeaD9jGmZ7lpCgT5Zl8skuLzQqnfgLR1KZWGN9rDXFAS6LAuFVslpbcwFWlShqespESEtGCnuPhIuyXwuTBWtRfMR5BJZz9u9l8UX8WHci9xKUX6o20SuLjB+CuvfJghvrD+rtAzpxeJ9KLPyP0HzJj01QNNDNGOmCC9MRQ2TIkmlrLszsXKeuTgOgSuFbih5E5OJMmgSHLuWvhdlnxtpOo8V/Px6R4w5gLzdiHm70JCckTBHY2N17HtMu0DJIbCNf/kVnZhJN25bC51wQCTKjF3LFKYaR7oOQQbfc5RkJU19EUOVez4uRmtCXLl7ZI03GO825W5Cixnap1mOtt3eOb32zL+/jxyaBmLXA7pKJbOgMWYBaUXWnUQx4vX/EHRaMaOdVoWRGPmBnrmLTzD1di9BWs+iTrmH4PuNnEuGrdwbQ83Qku53ZBnm8AMAUayj/0u5VyCqQqaolWJPpIrfB/ErWeNrpVmkHn4SE=
+  on:
+    repo: FreeAllMedia/mrt
+    branch: master
 branches:
   only:
   - master
