@@ -14,6 +14,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var useVoice = Symbol();
+
 var Person = function (_ChainLink) {
 	_inherits(Person, _ChainLink);
 
@@ -30,7 +32,12 @@ var Person = function (_ChainLink) {
 		}
 	}, {
 		key: "yell",
-		value: function yell() {}
+		value: function yell() {
+			this[useVoice]();
+		}
+	}, {
+		key: useVoice,
+		value: function value() {}
 	}]);
 
 	return Person;
@@ -64,6 +71,12 @@ describe("chainLink.link (custom function)", function () {
 	});
 
 	it("should copy custom functions from parent links to child links", function () {
-		person.arm("left").yell.should.eql(person.constructor.prototype.yell);
+		person.arm("left").should.respondTo("yell");
+	});
+
+	it("should bind the parent function to the child link", function () {
+		(function () {
+			person.arm("left").yell("Wubba Lubba Dub Dub!");
+		}).should.not.throw();
 	});
 });

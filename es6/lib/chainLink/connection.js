@@ -51,7 +51,7 @@ export default class Connection {
 		});
 
 		propertyNames.forEach(propertyName => {
-			instance[propertyName] = this.parentLink[propertyName];
+			instance[propertyName] = this.parentLink[propertyName].bind(this.parentLink);
 		});
 
 		this.parentLink.links.all.forEach(link => {

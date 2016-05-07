@@ -88,10 +88,8 @@ var Connection = function () {
 				}
 			});
 
-			//console.log("propertyNames", propertyNames);
-
 			propertyNames.forEach(function (propertyName) {
-				instance[propertyName] = _this2.parentLink[propertyName];
+				instance[propertyName] = _this2.parentLink[propertyName].bind(_this2.parentLink);
 			});
 
 			this.parentLink.links.all.forEach(function (link) {
