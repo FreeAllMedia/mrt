@@ -30,6 +30,7 @@ var ParameterCollection = function () {
 
 		_.aggregate = false;
 		_.multiValue = false;
+		_.asProperty = false;
 
 		this.parameters = {};
 
@@ -65,6 +66,27 @@ var ParameterCollection = function () {
 	}
 
 	_createClass(ParameterCollection, [{
+		key: "parameterNames",
+		value: function parameterNames() {
+			var _ = (0, _incognito2.default)(this);
+
+			for (var _len2 = arguments.length, newParameterNames = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+				newParameterNames[_key2] = arguments[_key2];
+			}
+
+			if (newParameterNames.length > 0) {
+				_.parameterNames = newParameterNames;
+				return this;
+			} else {
+				return _.parameterNames;
+			}
+		}
+	}, {
+		key: "isAggregate",
+		get: function get() {
+			return (0, _incognito2.default)(this).aggregate;
+		}
+	}, {
 		key: "aggregate",
 		get: function get() {
 			var _this2 = this;
@@ -77,15 +99,27 @@ var ParameterCollection = function () {
 			return this;
 		}
 	}, {
+		key: "isMultiValue",
+		get: function get() {
+			return (0, _incognito2.default)(this).multiValue;
+		}
+	}, {
 		key: "multiValue",
 		get: function get() {
 			(0, _incognito2.default)(this).multiValue = true;
 			return this;
 		}
 	}, {
+		key: "isProperty",
+		get: function get() {
+			return (0, _incognito2.default)(this).asProperty;
+		}
+	}, {
 		key: "asProperty",
 		get: function get() {
 			var _ = (0, _incognito2.default)(this);
+
+			_.asProperty = true;
 
 			_.parameterNames.forEach(function (parameterName) {
 				var capitalizedMethodName = (0, _jargon2.default)(parameterName).pascal.toString();
