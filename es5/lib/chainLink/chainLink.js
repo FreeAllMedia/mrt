@@ -5,8 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ParameterCollection = undefined;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _incognito = require("incognito");
@@ -26,6 +24,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 exports.ParameterCollection = _parameterCollection2.default;
+
+
+var externalFunction = Symbol();
 
 var ChainLink = function () {
 	function ChainLink() {
@@ -47,32 +48,21 @@ var ChainLink = function () {
 	}, {
 		key: "parameters",
 		value: function parameters() {
-			var _ = (0, _incognito2.default)(this);
-
 			for (var _len = arguments.length, parameterNames = Array(_len), _key = 0; _key < _len; _key++) {
 				parameterNames[_key] = arguments[_key];
 			}
 
-			if (parameterNames.length > 0) {
-				var parameterCollection = new _parameterCollection2.default(this, parameterNames);
-				_.parameterCollections.push(parameterCollection);
-
-				return parameterCollection;
-			} else {
-				var _ret = function () {
-					var parameterValues = {};
-
-					_.parameterCollections.forEach(function (parameterCollection) {
-						parameterValues = Object.assign(parameterValues, parameterCollection.parameters);
-					});
-
-					return {
-						v: parameterValues
-					};
-				}();
-
-				if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
-			}
+			return this[externalFunction].apply(this, ["./chainLink.parameters.js"].concat(parameterNames));
+		}
+	}, {
+		key: "parameterNames",
+		value: function parameterNames() {
+			return Object.keys(this.parameters());
+		}
+	}, {
+		key: "parameterCollections",
+		value: function parameterCollections() {
+			return (0, _incognito2.default)(this).parameterCollections;
 		}
 	}, {
 		key: "link",
@@ -80,6 +70,17 @@ var ChainLink = function () {
 			var newLink = new _connection2.default(this, methodName, LinkConstructor);
 			this.links.all.push(newLink);
 			return newLink;
+		}
+	}, {
+		key: externalFunction,
+		value: function value(filePath) {
+			var _require$default;
+
+			for (var _len2 = arguments.length, fileArguments = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+				fileArguments[_key2 - 1] = arguments[_key2];
+			}
+
+			return (_require$default = require(filePath).default).call.apply(_require$default, [this].concat(fileArguments));
 		}
 	}]);
 

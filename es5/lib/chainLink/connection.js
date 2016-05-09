@@ -88,6 +88,14 @@ var Connection = function () {
 				}
 			});
 
+			var parameterNames = this.parentLink.parameterNames();
+
+			parameterNames.forEach(function (parameterName) {
+				if (!instance[parameterName]) {
+					instance[parameterName] = _this2.parentLink[parameterName];
+				}
+			});
+
 			propertyNames.forEach(function (propertyName) {
 				instance[propertyName] = _this2.parentLink[propertyName].bind(_this2.parentLink);
 			});

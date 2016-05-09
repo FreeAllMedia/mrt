@@ -16,6 +16,19 @@ dog.leg.leg.leg.head("fuzzy");
 
 
 
+const monster = new Monster();
+
+const head = monster.head;
+
+const blueEye = head.eye("blue");
+
+	head
+		.eye("green")
+		.eye("red")
+	.head
+		.eye
+			.color("green")
+	.tentacle.tentacle.tentacle
 
 
 

@@ -5,6 +5,8 @@ import Connection from "./connection.js";
 
 export { ParameterCollection };
 
+const externalFunction = Symbol();
+
 export default class ChainLink {
 	constructor(...options) {
 		const _ = privateData(this);
@@ -20,26 +22,24 @@ export default class ChainLink {
 	initialize() {}
 
 	parameters(...parameterNames) {
-		const _ = privateData(this);
-		if (parameterNames.length > 0) {
-			const parameterCollection = new ParameterCollection(this, parameterNames);
-			_.parameterCollections.push(parameterCollection);
+		return this[externalFunction]("./chainLink.parameters.js", ...parameterNames);
+	}
 
-			return parameterCollection;
-		} else {
-			let parameterValues = {};
+	parameterNames() {
+		return Object.keys(this.parameters());
+	}
 
-			_.parameterCollections.forEach(parameterCollection => {
-				parameterValues = Object.assign(parameterValues, parameterCollection.parameters);
-			});
-
-			return parameterValues;
-		}
+	parameterCollections() {
+		return privateData(this).parameterCollections;
 	}
 
 	link(methodName, LinkConstructor) {
 		const newLink = new Connection(this, methodName, LinkConstructor);
 		this.links.all.push(newLink);
 		return newLink;
+	}
+
+	[externalFunction](filePath, ...fileArguments) {
+		return require(filePath).default.call(this, ...fileArguments);
 	}
 }

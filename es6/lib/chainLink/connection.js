@@ -50,6 +50,14 @@ export default class Connection {
 			}
 		});
 
+		const parameterNames = this.parentLink.parameterNames();
+
+		parameterNames.forEach(parameterName => {
+			if (!instance[parameterName]) {
+				instance[parameterName] = this.parentLink[parameterName];
+			}
+		});
+
 		propertyNames.forEach(propertyName => {
 			instance[propertyName] = this.parentLink[propertyName].bind(this.parentLink);
 		});

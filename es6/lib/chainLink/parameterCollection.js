@@ -9,6 +9,7 @@ export default class ParameterCollection {
 
 		_.aggregate = false;
 		_.multiValue = false;
+		_.asProperty = false;
 
 		this.parameters = {};
 
@@ -39,6 +40,21 @@ export default class ParameterCollection {
 		});
 	}
 
+	parameterNames(...newParameterNames) {
+		const _ = privateData(this);
+
+		if (newParameterNames.length > 0) {
+			_.parameterNames = newParameterNames;
+			return this;
+		} else {
+			return _.parameterNames;
+		}
+	}
+
+	get isAggregate() {
+		return privateData(this).aggregate;
+	}
+
 	get aggregate() {
 		const _ = privateData(this);
 		_.aggregate = true;
@@ -48,13 +64,23 @@ export default class ParameterCollection {
 		return this;
 	}
 
+	get isMultiValue() {
+		return privateData(this).multiValue;
+	}
+
 	get multiValue() {
 		privateData(this).multiValue = true;
 		return this;
 	}
 
+	get isProperty() {
+		return privateData(this).asProperty;
+	}
+
 	get asProperty() {
 		const _ = privateData(this);
+
+		_.asProperty = true;
 
 		_.parameterNames.forEach(parameterName => {
 			const capitalizedMethodName = inflect(parameterName).pascal.toString();
