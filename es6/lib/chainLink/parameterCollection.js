@@ -10,6 +10,7 @@ export default class ParameterCollection {
 		_.aggregate = false;
 		_.multiValue = false;
 		_.asProperty = false;
+		_.mergeKeyValues = false;
 
 		this.parameters = {};
 
@@ -97,5 +98,29 @@ export default class ParameterCollection {
 		});
 
 		return this;
+	}
+
+	get mergeKeyValues() {
+		const _ = privateData(this);
+
+		_.mergeKeyValues = true;
+
+		_.parameterNames.forEach(parameterName => {
+
+			const parameterValues = this.parameters[parameterName] = {};
+
+			_.parentLink[parameterName] = valueCollection => {
+				if (valueCollection) {
+					for (let valueKey in valueCollection) {
+						let value = valueCollection[valueKey];
+
+						parameterValues[valueKey] = value;
+					}
+					return _.parentLink;
+				} else {
+					return parameterValues;
+				}
+			};
+		});
 	}
 }
