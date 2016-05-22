@@ -31,6 +31,7 @@ var ParameterCollection = function () {
 		_.aggregate = false;
 		_.multiValue = false;
 		_.asProperty = false;
+		_.mergeKeyValues = false;
 
 		this.parameters = {};
 
@@ -136,6 +137,33 @@ var ParameterCollection = function () {
 			});
 
 			return this;
+		}
+	}, {
+		key: "mergeKeyValues",
+		get: function get() {
+			var _this3 = this;
+
+			var _ = (0, _incognito2.default)(this);
+
+			_.mergeKeyValues = true;
+
+			_.parameterNames.forEach(function (parameterName) {
+
+				var parameterValues = _this3.parameters[parameterName] = {};
+
+				_.parentLink[parameterName] = function (valueCollection) {
+					if (valueCollection) {
+						for (var valueKey in valueCollection) {
+							var value = valueCollection[valueKey];
+
+							parameterValues[valueKey] = value;
+						}
+						return _.parentLink;
+					} else {
+						return parameterValues;
+					}
+				};
+			});
 		}
 	}]);
 
