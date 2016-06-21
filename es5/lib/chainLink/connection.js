@@ -97,7 +97,14 @@ var Connection = function () {
 			});
 
 			propertyNames.forEach(function (propertyName) {
-				instance[propertyName] = _this2.parentLink[propertyName].bind(_this2.parentLink);
+				var propertyDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(_this2.parentLink), propertyName);
+				if (propertyDescriptor.value) {
+					propertyDescriptor.value = propertyDescriptor.value.bind(_this2.parentLink);
+				}
+				if (propertyDescriptor.get) {
+					propertyDescriptor.get = propertyDescriptor.get.bind(_this2.parentLink);
+				}
+				Object.defineProperty(instance, propertyName, propertyDescriptor);
 			});
 
 			this.parentLink.links.all.forEach(function (link) {

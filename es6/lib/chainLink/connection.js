@@ -59,7 +59,10 @@ export default class Connection {
 		});
 
 		propertyNames.forEach(propertyName => {
-			instance[propertyName] = this.parentLink[propertyName].bind(this.parentLink);
+			const propertyDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.parentLink), propertyName);
+			if (propertyDescriptor.value) { propertyDescriptor.value = propertyDescriptor.value.bind(this.parentLink); }
+			if (propertyDescriptor.get) { propertyDescriptor.get = propertyDescriptor.get.bind(this.parentLink); }
+			Object.defineProperty(instance, propertyName, propertyDescriptor);
 		});
 
 		this.parentLink.links.all.forEach(link => {
