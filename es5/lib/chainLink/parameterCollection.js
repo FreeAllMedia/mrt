@@ -32,6 +32,7 @@ var ParameterCollection = function () {
 		_.multiValue = false;
 		_.asProperty = false;
 		_.mergeKeyValues = false;
+		_.filters = [];
 
 		this.parameters = {};
 
@@ -48,6 +49,10 @@ var ParameterCollection = function () {
 					if (!_.multiValue) {
 						newValue = newValue[0];
 					}
+
+					_.filters.forEach(function (filter) {
+						newValue = filter(newValue);
+					});
 
 					if (_.aggregate || _.multiValue) {
 						if (_.aggregate) {
@@ -81,6 +86,12 @@ var ParameterCollection = function () {
 			} else {
 				return _.parameterNames;
 			}
+		}
+	}, {
+		key: "filter",
+		value: function filter(filterFunction) {
+			(0, _incognito2.default)(this).filters.push(filterFunction);
+			return this;
 		}
 	}, {
 		key: "isAggregate",

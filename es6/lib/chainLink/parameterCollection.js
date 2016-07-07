@@ -11,6 +11,7 @@ export default class ParameterCollection {
 		_.multiValue = false;
 		_.asProperty = false;
 		_.mergeKeyValues = false;
+		_.filters = [];
 
 		this.parameters = {};
 
@@ -23,6 +24,10 @@ export default class ParameterCollection {
 					if (!_.multiValue) {
 						newValue = newValue[0];
 					}
+
+					_.filters.forEach(filter => {
+						newValue = filter(newValue);
+					});
 
 					if (_.aggregate || _.multiValue) {
 						if (_.aggregate) {
@@ -71,6 +76,11 @@ export default class ParameterCollection {
 
 	get multiValue() {
 		privateData(this).multiValue = true;
+		return this;
+	}
+
+	filter(filterFunction) {
+		privateData(this).filters.push(filterFunction);
 		return this;
 	}
 
