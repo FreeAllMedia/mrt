@@ -32,6 +32,8 @@ branches:
   only:
   - master
   - develop
+  - /^feature\/.*$/
+  - /^release\/.*$/
 env:
   global:
   - secure: CT6F6CWDgemiTDb6rKk8694AY6vW96ldJyB6JneKppr7FrPoNBSyVEyTRAxwr6KBdRERClJqKknZtsUnx7AFqV8WraDpAZXJK7WNy7NLcpEGGkTtR1AzjgUoaPmyZQxxUgw9UGgLCthKFIx+xSdEmsw8TNI6KLc7oHodsCDMIzow1zfw/04j1LkkWhVniIOyd0iDIzvWW/jqsJGyB7l3UBTVeOho4GMqPQLNukCzm1UZn+Ysk/9qZa/JMg4llnk4LUlNXOlJlZpPp7VgcJiLxAvFqr8iAz9K96w0Os7c2mtD7EoywiTy6gBsPhrfZ5rSZmv6tS6CK7lqE9jMxNphJiEkAUF7QMSEl/i381iOEzBVmEo+tolZaRKyzPSMEB/DouyLa2IGstGQh4lDq+lwNyBkBqB0jMWb9pRt2lca+HN/XNF4V6hozLM6eF5HX6hcEL9ApxehEP64fuPHLHKghz+2UAHrsyG5SoriS5Ktcz3Kcm3P+y2/WVyjFqTzLlVkvB2XKPpr6Qih0lehInuUY+xcQVks7MKM0D1ibg54BLITxSITS7/+ONQY1KeBh5Xo8pdG5VMmhAV979bB/lY09deu2CuGMjCPjTbgWJh7wQN0miFgMyl7M0dIqHcxwvj5l/UXymvBaktg2xPAVH120Nz8TjZNogxgxZq042s6cTk=
