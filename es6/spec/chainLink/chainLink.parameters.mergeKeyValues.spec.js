@@ -2,7 +2,7 @@ import ChainLink from "../../lib/chainLink/chainLink.js";
 
 class Person extends ChainLink {
 	initialize() {
-		this.parameters("answers").mergeKeyValues;
+		this.returnValue = this.parameters("answers").mergeKeyValues;
 	}
 }
 
@@ -29,7 +29,7 @@ describe(".parameters.mergeKeyValues", () => {
 	});
 
 	it("should return this to enable chaining after setting a value", () => {
-		person.answers(answersOne).should.equal(person);
+		person.returnValue.should.eql(person.parameterCollections()[0]);
 	});
 
 	it("should save aggregate the values of multiple calls", () => {

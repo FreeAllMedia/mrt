@@ -26,7 +26,7 @@ var Person = function (_ChainLink) {
 	_createClass(Person, [{
 		key: "initialize",
 		value: function initialize() {
-			this.parameters("answers").mergeKeyValues;
+			this.returnValue = this.parameters("answers").mergeKeyValues;
 		}
 	}]);
 
@@ -56,7 +56,7 @@ describe(".parameters.mergeKeyValues", function () {
 	});
 
 	it("should return this to enable chaining after setting a value", function () {
-		person.answers(answersOne).should.equal(person);
+		person.returnValue.should.eql(person.parameterCollections()[0]);
 	});
 
 	it("should save aggregate the values of multiple calls", function () {

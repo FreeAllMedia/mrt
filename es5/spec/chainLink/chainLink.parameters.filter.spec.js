@@ -29,6 +29,15 @@ var Numbers = function (_ChainLink) {
 			this.returnValue = this.parameters("values").aggregate.filter(function (value) {
 				return parseInt(value);
 			});
+
+			this.parameters("memoryStore").mergeKeyValues.filter(function (value) {
+				var newValue = parseInt(value);
+				if (newValue) {
+					return newValue;
+				} else {
+					return value;
+				}
+			});
 		}
 	}]);
 
@@ -46,7 +55,19 @@ describe(".parameters.filter(filterFunction)", function () {
 		numbers.returnValue.should.eql(numbers.parameterCollections()[0]);
 	});
 
-	it("should transform values based upon the filter function return value", function () {
+	it("should transform raw values", function () {
 		numbers.values("1").values("2").values("3").values().should.have.members([1, 2, 3]);
+	});
+
+	it("should transform parameters with merged key values", function () {
+		numbers.memoryStore({
+			"1": "2",
+			"3": "4",
+			"bob": "belcher"
+		}).memoryStore().should.eql({
+			"1": 2,
+			"3": 4,
+			"bob": "belcher"
+		});
 	});
 });

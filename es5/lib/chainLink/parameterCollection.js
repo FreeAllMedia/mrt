@@ -164,10 +164,18 @@ var ParameterCollection = function () {
 
 				_.parentLink[parameterName] = function (valueCollection) {
 					if (valueCollection) {
-						for (var valueKey in valueCollection) {
+						var _loop = function _loop(valueKey) {
 							var value = valueCollection[valueKey];
 
+							_.filters.forEach(function (filter) {
+								value = filter(value);
+							});
+
 							parameterValues[valueKey] = value;
+						};
+
+						for (var valueKey in valueCollection) {
+							_loop(valueKey);
 						}
 						return _.parentLink;
 					} else {
@@ -175,6 +183,8 @@ var ParameterCollection = function () {
 					}
 				};
 			});
+
+			return this;
 		}
 	}]);
 

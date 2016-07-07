@@ -124,6 +124,10 @@ export default class ParameterCollection {
 					for (let valueKey in valueCollection) {
 						let value = valueCollection[valueKey];
 
+						_.filters.forEach(filter => {
+							value = filter(value);
+						});
+
 						parameterValues[valueKey] = value;
 					}
 					return _.parentLink;
@@ -132,5 +136,7 @@ export default class ParameterCollection {
 				}
 			};
 		});
+
+		return this;
 	}
 }
