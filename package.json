@@ -1,6 +1,6 @@
 {
   "name": "mrt",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Build complex interfaces with ease.",
   "main": "index.js",
   "scripts": {
