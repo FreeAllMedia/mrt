@@ -14,60 +14,59 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Numbers = function (_ChainLink) {
-	_inherits(Numbers, _ChainLink);
+var Person = function (_ChainLink) {
+	_inherits(Person, _ChainLink);
 
-	function Numbers() {
-		_classCallCheck(this, Numbers);
+	function Person() {
+		_classCallCheck(this, Person);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Numbers).apply(this, arguments));
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(Person).apply(this, arguments));
 	}
 
-	_createClass(Numbers, [{
+	_createClass(Person, [{
 		key: "initialize",
 		value: function initialize() {
-			this.returnValue = this.parameters("values").aggregate.filter(function (value) {
-				return parseInt(value);
-			});
-
-			this.parameters("memoryStore").merge.filter(function (value) {
-				var newValue = parseInt(value);
-				if (newValue) {
-					return newValue;
-				} else {
-					return value;
-				}
-			});
+			this.returnValue = this.parameters("answers").merge;
 		}
 	}]);
 
-	return Numbers;
+	return Person;
 }(_chainLink2.default);
 
-describe(".parameters.filter(filterFunction)", function () {
-	var numbers = void 0;
+describe(".parameters.merge", function () {
+	var person = void 0,
+	    answersOne = void 0,
+	    answersTwo = void 0;
 
 	beforeEach(function () {
-		numbers = new Numbers();
+		person = new Person();
+
+		answersOne = {
+			"Bob": "Builder",
+			"Thomas": "Engine"
+		};
+
+		answersTwo = {
+			"Bob": "Belcher"
+		};
 	});
 
-	it("should return this when setting to enable chaining", function () {
-		numbers.returnValue.should.eql(numbers.parameterCollections()[0]);
+	it("should be set to an empty object by default", function () {
+		person.answers().should.eql({});
 	});
 
-	it("should transform raw values", function () {
-		numbers.values("1").values("2").values("3").values().should.have.members([1, 2, 3]);
+	it("should return this to enable chaining after setting a value", function () {
+		person.returnValue.should.eql(person.parameterCollections()[0]);
 	});
 
-	it("should transform parameters with merged key values", function () {
-		numbers.memoryStore({
-			"1": "2",
-			"3": "4",
-			"bob": "belcher"
-		}).memoryStore().should.eql({
-			"1": 2,
-			"3": 4,
-			"bob": "belcher"
-		});
+	it("should save aggregate the values of multiple calls", function () {
+		person.answers(answersOne).answers(answersTwo);
+
+		var expectedMergedAnswers = {
+			"Bob": "Belcher",
+			"Thomas": "Engine"
+		};
+
+		person.answers().should.eql(expectedMergedAnswers);
 	});
 });

@@ -31,7 +31,7 @@ var ParameterCollection = function () {
 		_.aggregate = false;
 		_.multiValue = false;
 		_.asProperty = false;
-		_.mergeKeyValues = false;
+		_.merge = false;
 		_.filters = [];
 
 		this.parameters = {};
@@ -150,13 +150,13 @@ var ParameterCollection = function () {
 			return this;
 		}
 	}, {
-		key: "mergeKeyValues",
+		key: "merge",
 		get: function get() {
 			var _this3 = this;
 
 			var _ = (0, _incognito2.default)(this);
 
-			_.mergeKeyValues = true;
+			_.merge = true;
 
 			_.parameterNames.forEach(function (parameterName) {
 

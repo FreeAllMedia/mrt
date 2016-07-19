@@ -10,7 +10,7 @@ export default class ParameterCollection {
 		_.aggregate = false;
 		_.multiValue = false;
 		_.asProperty = false;
-		_.mergeKeyValues = false;
+		_.merge = false;
 		_.filters = [];
 
 		this.parameters = {};
@@ -110,10 +110,10 @@ export default class ParameterCollection {
 		return this;
 	}
 
-	get mergeKeyValues() {
+	get merge() {
 		const _ = privateData(this);
 
-		_.mergeKeyValues = true;
+		_.merge = true;
 
 		_.parameterNames.forEach(parameterName => {
 

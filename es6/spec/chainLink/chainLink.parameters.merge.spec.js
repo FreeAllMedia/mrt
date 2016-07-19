@@ -2,11 +2,11 @@ import ChainLink from "../../lib/chainLink/chainLink.js";
 
 class Person extends ChainLink {
 	initialize() {
-		this.returnValue = this.parameters("answers").mergeKeyValues;
+		this.returnValue = this.parameters("answers").merge;
 	}
 }
 
-describe(".parameters.mergeKeyValues", () => {
+describe(".parameters.merge", () => {
 	let person,
 			answersOne,
 			answersTwo;
