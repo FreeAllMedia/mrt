@@ -7,7 +7,7 @@ class Numbers extends ChainLink {
 			.filter(value => parseInt(value));
 
 		this.parameters("memoryStore")
-			.mergeKeyValues
+			.merge
 			.filter(value => {
 				const newValue = parseInt(value);
 				if (newValue) {
