@@ -2,14 +2,14 @@
 import ChainLink from "../../lib/chainLink/chainLink.js";
 
 describe("ChainLink (custom functions)", () => {
-	let parameters,
+	let properties,
 			chainLink;
 
 	class CustomChainLink extends ChainLink {
 		initialize() {
 			this
 				.link("sub", SubLink)
-				.asProperty;
+				.getter;
 		}
 		get something() {
 			return true;
@@ -20,7 +20,7 @@ describe("ChainLink (custom functions)", () => {
 
 	/* Test Setup For Scope */
 	beforeEach(() => {
-		chainLink = new CustomChainLink(parameters);
+		chainLink = new CustomChainLink(properties);
 		chainLink.sub;
 	});
 

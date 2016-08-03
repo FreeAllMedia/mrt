@@ -22,12 +22,12 @@ export default class Connection {
 		this.parentLink[this.methodName] = this.method;
 	}
 
-	usingKey(keyName) {
+	key(keyName) {
 		privateData(this).keyName = keyName;
 		return this;
 	}
 
-	usingArguments(...newArguments) {
+	arguments(...newArguments) {
 		const _ = privateData(this);
 		_.useArguments = _.useArguments.concat(newArguments);
 		return this;
@@ -40,7 +40,7 @@ export default class Connection {
 
 		const instance = new this.ChainLinkConstructor(...options);
 
-		const propertyNames = Object.getOwnPropertyNames(this.parentLink.constructor.prototype).filter(propertyName => {
+		const methodNames = Object.getOwnPropertyNames(this.parentLink.constructor.prototype).filter(propertyName => {
 			switch (propertyName) {
 				case "constructor":
 				case "initialize":
@@ -50,15 +50,15 @@ export default class Connection {
 			}
 		});
 
-		const parameterNames = this.parentLink.parameterNames();
+		const propertyNames = this.parentLink.propertyNames();
 
-		parameterNames.forEach(parameterName => {
-			if (!instance[parameterName]) {
-				instance[parameterName] = this.parentLink[parameterName];
+		propertyNames.forEach(propertyName => {
+			if (!instance[propertyName]) {
+				instance[propertyName] = this.parentLink[propertyName];
 			}
 		});
 
-		propertyNames.forEach(propertyName => {
+		methodNames.forEach(propertyName => {
 			const propertyDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.parentLink), propertyName);
 			if (propertyDescriptor.value) { propertyDescriptor.value = propertyDescriptor.value.bind(this.parentLink); }
 			if (propertyDescriptor.get) { propertyDescriptor.get = propertyDescriptor.get.bind(this.parentLink); }
@@ -79,8 +79,8 @@ export default class Connection {
 		if (_.keyName) {
 			const methodLinks = this.parentLink.links[this.methodName] = this.parentLink.links[this.methodName] || {};
 
-			const parameterValues = instance.parameters();
-			const keyValue = parameterValues[_.keyName];
+			const propertyValues = instance.properties();
+			const keyValue = propertyValues[_.keyName];
 
 			methodLinks[keyValue] = instance;
 		} else {
@@ -104,13 +104,13 @@ export default class Connection {
 					let intoObjects = {};
 
 					intoLink.forEach(intoObject => {
-						const keyValue = intoObject.parameters()[_.keyName];
+						const keyValue = intoObject.properties()[_.keyName];
 						intoObjects[keyValue] = intoObject;
 					});
 
 					this.parentLink[_.into] = intoObjects;
 				} else {
-					const keyValue = instance.parameters()[_.keyName];
+					const keyValue = instance.properties()[_.keyName];
 					intoLink[keyValue] = instance;
 				}
 			} else {
@@ -121,15 +121,15 @@ export default class Connection {
 		if (_.inherit) {
 			const inheritedParameterNames = _.inherit;
 
-			inheritedParameterNames.forEach(parameterName => {
-				const capitalizedMethodName = inflect(parameterName).pascal.toString();
+			inheritedParameterNames.forEach(propertyName => {
+				const capitalizedMethodName = inflect(propertyName).pascal.toString();
 				const getMethodName = `is${capitalizedMethodName}`;
 
 				if (this.parentLink.hasOwnProperty(getMethodName)) {
-					instance[parameterName];
+					instance[propertyName];
 				} else {
-					const parameterValue = this.parentLink[parameterName]();
-					instance[parameterName](parameterValue);
+					const propertyValue = this.parentLink[propertyName]();
+					instance[propertyName](propertyValue);
 				}
 			});
 		}
@@ -160,7 +160,7 @@ export default class Connection {
 		privateData(this).then = thenFunction;
 	}
 
-	get asProperty() {
+	get getter() {
 		Object.defineProperty(this.parentLink, this.methodName, {
 			get: () => {
 				return this[addLink]();
@@ -170,7 +170,7 @@ export default class Connection {
 		return this;
 	}
 
-	inherit(...parameterNames) {
-		privateData(this).inherit = parameterNames;
+	inherit(...propertyNames) {
+		privateData(this).inherit = propertyNames;
 	}
 }

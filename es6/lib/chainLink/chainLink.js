@@ -1,6 +1,6 @@
 import privateData from "incognito";
 
-import ParameterCollection from "./parameterCollection.js";
+import ParameterCollection from "./propertyCollection.js";
 import Connection from "./connection.js";
 
 export { ParameterCollection };
@@ -10,7 +10,7 @@ const externalFunction = Symbol();
 export default class ChainLink {
 	constructor(...options) {
 		const _ = privateData(this);
-		_.parameterCollections = [];
+		_.propertyCollections = [];
 
 		this.links = {
 			all: []
@@ -21,16 +21,16 @@ export default class ChainLink {
 
 	initialize() {}
 
-	parameters(...parameterNames) {
-		return this[externalFunction]("./chainLink.parameters.js", ...parameterNames);
+	properties(...propertyNames) {
+		return this[externalFunction]("./chainLink.properties.js", ...propertyNames);
 	}
 
-	parameterNames() {
-		return Object.keys(this.parameters());
+	propertyNames() {
+		return Object.keys(this.properties());
 	}
 
-	parameterCollections() {
-		return privateData(this).parameterCollections;
+	propertyCollections() {
+		return privateData(this).propertyCollections;
 	}
 
 	link(methodName, LinkConstructor) {
