@@ -1,348 +1,239 @@
-# MRT [![npm version](https://img.shields.io/npm/v/mrt.svg)](https://www.npmjs.com/package/mrt) [![license type](https://img.shields.io/npm/l/mrt.svg)](https://github.com/FreeAllMedia/mrt.git/blob/master/LICENSE)  [![Build Status](https://travis-ci.org/FreeAllMedia/mrt.png?branch=master)](https://travis-ci.org/FreeAllMedia/mrt) [![Coverage Status](https://coveralls.io/repos/github/FreeAllMedia/mrt/badge.svg?branch=master)](https://coveralls.io/github/FreeAllMedia/mrt?branch=master) [![Code Climate](https://codeclimate.com/github/FreeAllMedia/mrt/badges/gpa.svg)](https://codeclimate.com/github/FreeAllMedia/mrt) [![bitHound Score](https://www.bithound.io/github/FreeAllMedia/mrt/badges/score.svg)](https://www.bithound.io/github/FreeAllMedia/mrt) [![Dependency Status](https://david-dm.org/FreeAllMedia/mrt.png?theme=shields.io)](https://david-dm.org/FreeAllMedia/mrt?theme=shields.io) [![Dev Dependency Status](https://david-dm.org/FreeAllMedia/mrt/dev-status.svg)](https://david-dm.org/FreeAllMedia/mrt?theme=shields.io#info=devDependencies) [![npm downloads](https://img.shields.io/npm/dm/mrt.svg)](https://www.npmjs.com/package/mrt) ![Source: ECMAScript 6](https://img.shields.io/badge/Source-ECMAScript_2015-green.svg)
+![](./images/mrt-logo.png)
 
-MRT assists you in rapidly developing highly-readable chained interfaces for your own libraries.
+[![npm version](https://img.shields.io/npm/v/mrt.svg)](https://www.npmjs.com/package/mrt) [![license type](https://img.shields.io/npm/l/mrt.svg)](https://github.com/FreeAllMedia/mrt.git/blob/master/LICENSE)  [![Build Status](https://travis-ci.org/FreeAllMedia/mrt.png?branch=master)](https://travis-ci.org/FreeAllMedia/mrt) [![Coverage Status](https://coveralls.io/repos/github/FreeAllMedia/mrt/badge.svg?branch=master)](https://coveralls.io/github/FreeAllMedia/mrt?branch=master) [![Code Climate](https://codeclimate.com/github/FreeAllMedia/mrt/badges/gpa.svg)](https://codeclimate.com/github/FreeAllMedia/mrt) [![bitHound Score](https://www.bithound.io/github/FreeAllMedia/mrt/badges/score.svg)](https://www.bithound.io/github/FreeAllMedia/mrt) [![Dependency Status](https://david-dm.org/FreeAllMedia/mrt.png?theme=shields.io)](https://david-dm.org/FreeAllMedia/mrt?theme=shields.io) [![Dev Dependency Status](https://david-dm.org/FreeAllMedia/mrt/dev-status.svg)](https://david-dm.org/FreeAllMedia/mrt?theme=shields.io#info=devDependencies) [![npm downloads](https://img.shields.io/npm/dm/mrt.svg)](https://www.npmjs.com/package/mrt) ![Source: ECMAScript 6](https://img.shields.io/badge/Source-ECMAScript_2015-green.svg)
 
-**Simple chained interfaces:**
+# Overview
 
-``` javascript
-import Server from "server";
+MrT is a tool for making simple and complex chained interfaces on javascript libraries.
 
-const server = new Server();
+The resulting syntax is supremely easy-to-read while still being flexible and 100% [vanilla-js](https://vanilla-js.org).
 
-server
-	.listen(3030)
-	.logTo("./server.log")
-	.onRequest((request, response) => {
-		console.log(`Received request with body: ${request.body}`);
-	});
-```
+# Installation
 
-**Complex multi-tier chained interfaces:**
-
-``` javascript
-import Server from "server";
-import AccountController from "./controllers/account.controller.js";
-
-const accountController = new AccountController();
-
-const server = new Server();
-
-server
-	.public
-		.get("/account")
-			.action(accountController.list)
-		.get("/account/:id")
-			.action(accountController.show)
-	.authenticated
-		.authorized("owner", "admin")
-			.put("/account/:id")
-				.action(accountController.update)
-		.authorized("admin")
-			.post("/account")
-				.action(accountController.create)
-			.delete("/account/:id")
-				.action(accountController.delete);
-```
-
-# Getting Started With MRT
-
-## Installation
-
-The easiest and fastest way to install MRT is through the `node package manager`:
+The easiest and fastest way to install MrT is through the `node package manager`:
 
 ``` shell
 $ npm install mrt --save
 ```
 
-## Create a Simple Chain
+# API Guide
 
-### Inherit MRT's ChainLink
+**Note:** In each of the following examples we're going to use MrT to build the programmatic interface for a game backend, however it is a generic tool and works just as well for non-game-related projects.
 
-To use MRT, create a constructor that inherits from MRT's `ChainLink`. This is done in two different ways depending on whether you're using `ES5` or `ES6+`:
+Each function has an associated example that is split into two files:
 
-**ES6 Example:**
+* `app.js` uses the interface defined in `game.js`.
+* `game.js` defines the interface that is used in `app.js`
 
-``` javascript
-import ChainLink from "mrt";
+## `.parameters`
 
-class Server extends ChainLink {}
-```
-
-**ES5 Example:**
-
-``` javascript
-var ChainLink = require("mrt");
-
-function Server() {}
-
-Server.prototype = Object.create(ChainLink.prototype);
-```
-
-### Add Simple Parameters
-
-MRT can either use the default constructor, or a built-in alternate "constructor" called `.initialize()` which automatically calls `super()` for you. This conveniently avoids the "must call super() before this" error:
-
-``` javascript
-// server.js
-
-import ChainLink from "mrt";
-
-class Server extends ChainLink {
-	initialize(name) {
-		this.parameters(
-			"name",
-			"port",
-			"logTo"
-		);
-
-		this.name(name);
-	}
-
-	listen(serverListening) {
-		// Start server listening on specified port
-		return this;
-	}
-
-	close(serverClosed) {
-		// Stop the server from listening for requests
-		return this;
-	}
-}
-```
-
-This makes the following interface available:
+In this simple example, we'
 
 ``` javascript
 // app.js
 
-import Server from "./server.js";
+import Game from "./game.js";
 
-const server = new Server("My Server");
+const game = new Game("Robots vs Aliens")
 
-server
-	.port(3030)
-	.logTo("./server.log")
-	.listen(() => {
-		// Server is now listening
-	});
+.army("Robots")
+.army("Sluggoids");
 
-server
-	.close(() => {
-		// Server has stopped listening
-	});
+game.army().should.eql(["Robots", "Sluggoids"]);
 ```
 
-#### Add Complex Parameters
-
-Parameters can also be setup to have multiple and aggregate values:
-
 ``` javascript
+// game.js
+
 import ChainLink from "mrt";
 
-class Person extends ChainLink {
-	initialize(name) {
-		this.parameters("name");
-		this.name(name);
+class Game extends ChainLink {
+  initialize(name) {
+    this.parameters("name");
+    this.parameters("army").aggregate;
 
-		this.parameters("dead").asProperty;
-
-		this.parameters("favoriteCities")
-			.aggregate;
-
-		this.parameters("placeOfOrigin")
-			.multiValue;
-
-		this.parameters("placesVisited")
-			.multiValue
-			.aggregate;
-	}
+    this.name(name);
+  }
 }
+
+export default Game;
 ```
 
-This creates the following interface:
+**Object-Oriented Chained Interfaces**
 
 ``` javascript
-const person = new Person("Lex Luthor");
+// app.js
 
-person.isDead; // false
-person.dead;
-person.isDead; // true
+import Game from "./game.js";
 
-person.placeOfOrigin("Metropolis", "Delaware");
+const game = new Game("Robots vs Aliens")
 
-person
-	.placeVisited("Gotham", "New Jersey")
-	.placeVisited("Metropolis", "Delaware");
+.army("Robots")
+  .workers(24)
+  .warriors(55)
+.army("Sluggoids")
+  .workers(84)
+  .warriors(21);
 
-person.placesVisited; // [["Gotham", "New Jersey"], ["Metropolis", "Delaware"]]
+const robots = game.armies["Robots"];
+const sluggoids = game.armies["Sluggoids"];
+const zappdons = game.army("Zappdons");
 
-person
-	.thought("Superman is a real jerk!");
-	.thought("Darn you Batman!");
-	.thought("Does this robotic death suit make me look fat?");
+zappdons.workers(12).warriors(86);
 
-person.thoughts; // ["Superman is a real jerk!", "Darn you Batman!", "Does this robotic death suit make me look fat?"]
+robots.workers(); // 24
+sluggoids.workers(); // 84
+zappdons.workers(); // 12
 ```
 
-# Creating Complex Chains
-
-A `ChainLink` can `.link()` to another `ChainLink` to form complex multi-tiered chained interfaces:
-
 ``` javascript
+// game.js
+
 import ChainLink from "mrt";
 
-class Monster extends ChainLink {
-	initialize(name) {
-		this.parameters("name");
-
-		this.name(name);
-
-		this
-			.link("tentacle", Tentacle)
-				.into("tentacles")
-			.link("eye", Eye)
-				.into("eyes")
-				.asProperty;
-	}
+class Game extends ChainLink {
+  initialize(name) {
+    this.parameters("name");
+    this.link("army", Army).merge.into("armies");
+    this.name(name);
+  }
 }
 
-class Tentacle extends ChainLink {
-	initialize(hitpoints) {
-		this.parameters("hitpoints");
-		this.hitpoints(hitpoints);
+export default Game;
 
-		this.link("spike", Spike).into("spikes").asProperty;
-	}
+class Army extends ChainLink {
+  initialize(name) {
+    this.parameters(
+      "name",
+      "workers",
+      "warriors"
+    );
+    this.name(name);
+  }
 }
-
-class Spike extends ChainLink {}
-
-class Eye extends ChainLink {}
-
 ```
 
-This produces the following multi-tiered interface:
+**Multi-Tiered Object-Oriented Chained Interfaces**
 
 ``` javascript
-const monster = new Monster("Zig Zug");
+// app.js
 
-monster
-	.eye
-	.eye
-	.eye
-	.tentacle(10)
-		.spike.spike.spike.spike.spike.spike
-	.tentacle(10)
-		.spike.spike.spike
-	.tentacle(20)
-		.spike.spike.spike.spike
-	.tentacle(20)
-		.spike.spike;
+import Game from "./game.js";
 
-monster.eyes.length; // 3
-monster.tentacles.length; // 4
+const game = new Game("Robots vs Aliens")
 
-const firstTentacle = monster.tentacles[0];
+.army("Robots")
+  .workers(24)
+    .tools
+      .shovels(10)
+      .laserDrills(2)
+  .warriors(55)
+    .weapons
+      .pistols(55)
+      .rifles(55)
 
-firstTentacle.hitpoints(); // 10
-firstTentacle.spikes.length; // 6
+.army("Sluggoids")
+  .workers(84)
+    .tools
+      .shovels(42)
+      .laserDrills(9)
+  .warriors(21)
+    .weapons
+      .pistols(21)
+      .rifles(21);
+
+/**
+ * Each link returns a portable object:
+ */
+
+const zappdons = game.army("Zappdons");
+
+const zappdonsWorkers = zappdons.workers(1);
+const zappdonsWarriors = zappdons.warriors(100);
+
+const zappdonsWorkersTools = zappdonsWorkers.tools;
+const zappdonsWarriorsWeapons = zappdonsWarriors.weapons;
+
+zappdonsWorkersTools.shovels(1).laserDrills(0);
+
+zappdonsWorkersWeapons
+  .pistols(100)
+  .rifles(100);
 ```
 
-### Custom Behavior
-
-MRT isn't just about creating data structures (though you can certainly use it for only that purpose!). It is also possible to add custom behavior to `ChainLinks` by adding methods the way you normally would:
-
 ``` javascript
+// game.js
+
 import ChainLink from "mrt";
 
-class Vehicle extends ChainLink {
-	initialize() {
-		this.parameters("type", "make", "model", "color");
-
-		this.type("vehicle");
-
-		this
-			.link("wheel", Wheel)
-				.into("wheels");
-	}
-
-	start() {
-		console.log(`Vroom! Vroom! The ${this.type} has started!`)
-		return this;
-	}
-
-	get honk() {
-		console.log("This vehicle is unfortunately not equipped with a horn.");
-		return this;
-	}
+class Game extends ChainLink {
+  initialize(name) {
+    this.parameters("name");
+    this.link("army", Army).merge.into("armies");
+    this.name(name);
+  }
 }
 
-class Wheel extends ChainLink {
-	initialize(diameter) {
-		this.parameters("diameter");
-		this.diameter(diameter);
-	}
+export default Game;
+
+/**
+ * Army
+ */
+
+class Army extends ChainLink {
+  initialize(name) {
+    this.parameters("name");
+    this.name(name);
+
+    this.link("workers", Workers);
+    this.link("warriors", Warriors);
+  }
 }
 
-class Car extends Vehicle {
-	initialize() {
-		super();
-		this.type("car");
+/**
+ * Units
+ */
 
-		this
-			.wheel(20)
-			.wheel(20)
-			.wheel(20)
-			.wheel(20);
-	}
-
-	get honk() {
-		console.log("Honk! Honk!");
-		return this;
-	}
+class Unit extends ChainLink {
+  constructor(count) {
+    this.parameters("count");
+    this.initialize(count);
+  }
 }
 
-class Motorcycle extends Vehicle {
-	initialize() {
-		super();
+class Workers extends Unit {
+  initialize(count) {
+    this.parameters();
+    this.count(count);
+    this.link("tools", Tools).asProperty;
+  }
+}
 
-		this.type("motorcycle");
-		this
-			.wheel(17)
-			.wheel(17);
-	}
+class Warriors extends Unit {
+  initialize(count) {
+    this.parameters();
+    this.count(count);
+    this.link("weapons", Weapons).asProperty;
+  }
+}
 
-	get honk() {
-		console.log("Meep! Meep!");
-		return this;
-	}
+/**
+ * Equipment
+ */
+
+class Tools extends ChainLink {
+  initialize() {
+    this.parameters("shovels", "laserDrills");
+  }
+}
+
+class Weapons extends ChainLink {
+  initialize() {
+    this.parameters("pistols", "rifles");
+  }
 }
 ```
 
-Now you can call custom methods
+# Getting Started
 
-``` javascript
-const car = new Car();
-car
-	.make("Volkswagen")
-	.model("Golf")
-	.color("green")
-	.start() // "Vroom! Vroom! The car has started!"
-	.honk; // "Honk! Honk!"
-
-const motorcycle = new Motorcycle();
-motorcycle
-	.make("Kawasaki")
-	.model("Ninja")
-	.color("black")
-	.start() // "Vroom! Vroom! The motorcycle has started!"
-	.honk; // "Meep! Meep!"
-```
-
-# Compatibility
-
-MRT is automatically tested to be compatible with the following platforms:
-
-![node 6](https://img.shields.io/badge/node-6-brightgreen.svg) ![node 5](https://img.shields.io/badge/node-5-brightgreen.svg) ![node 4](https://img.shields.io/badge/node-4-brightgreen.svg) ![iojs 3](https://img.shields.io/badge/iojs-3-brightgreen.svg) ![iojs 2](https://img.shields.io/badge/iojs-2-brightgreen.svg) ![iojs 1](https://img.shields.io/badge/iojs-1-brightgreen.svg) ![node 0.12](https://img.shields.io/badge/node-0.12-brightgreen.svg) ![node 0.11](https://img.shields.io/badge/node-0.11-brightgreen.svg) ![node 0.10](https://img.shields.io/badge/node-0.10-brightgreen.svg)
-
-[![Sauce Test Status](https://saucelabs.com/buildstatus/fam-mrt)](https://saucelabs.com/u/fam-mrt)
+MrT is used by
