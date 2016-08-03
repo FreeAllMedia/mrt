@@ -6,7 +6,57 @@
 
 MrT is a tool for making simple and complex chained interfaces on javascript libraries.
 
-The resulting syntax is supremely easy-to-read while still being flexible and 100% [vanilla-js](https://vanilla-js.org).
+The resulting syntax is easy-to-read while still being flexible and 100% [vanilla-js](https://vanilla-js.org):
+
+``` javascript
+// Example interface for a web server
+
+const server = new Server()
+
+.public
+  .get("/account")
+    .action(accountController.list)
+  .get("/account/:id")
+    .action(accountController.show)
+
+.authenticated
+  .authorized("owner", "admin")
+    .put("/account/:id")
+      .action(accountController.update)
+  .authorized("admin")
+    .post("/account")
+      .action(accountController.create)
+    .delete("/account/:id")
+      .action(accountController.delete)
+
+.listen(3000);
+```
+
+``` javascript
+// Example interface for a game backend
+
+const game = new Game("Robots vs Aliens")
+
+.army("Robots")
+  .workers(24)
+    .tools
+      .shovels(10)
+      .laserDrills(2)
+  .warriors(55)
+    .weapons
+      .pistols(55)
+      .rifles(55)
+
+.army("Sluggoids")
+  .workers(84)
+    .tools
+      .shovels(42)
+      .laserDrills(9)
+  .warriors(21)
+    .weapons
+      .pistols(21)
+      .rifles(21);
+```
 
 # Installation
 
@@ -25,9 +75,42 @@ Each function has an associated example that is split into two files:
 * `app.js` uses the interface defined in `game.js`.
 * `game.js` defines the interface that is used in `app.js`
 
-## `.parameters`
+## `.properties` and `.link`
 
-In this simple example, we'
+MrT interfaces are defined with the `.link` and `.properties` methods.
+
+* A link creates a method that returns a new `ChainLink` object with all of it's parent's methods copied to it.
+* A property sets values on an existing `ChainLink` object. There are several types of properties that can be mixed and matched including: `multi`, `aggregate`, `merged`, and `property`.
+
+``` javascript
+import ChainLink from "mrt";
+
+class PrimaryLink extends ChainLink {
+  constructor(name) {
+    this.properties("name");
+    this.link("secondary", SecondaryLink);
+
+    this.name(name);
+  }
+}
+
+class SecondaryLink extends ChainLink {
+  constructor(...values) {
+    this.properties("values").multiValue;
+    this.values(...values);
+  }
+}
+
+const primary = new PrimaryLink("John");
+const secondary = primary.secondary(1, 2, 3);
+```
+
+## `.properties(...propertyNames)`
+
+
+
+## `.link(linkName, linkConstructor)`
+
 
 ``` javascript
 // app.js

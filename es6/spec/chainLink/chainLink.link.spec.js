@@ -9,14 +9,14 @@ class Person extends ChainLink {
 
 class Thought extends ChainLink {
 	initialize(dialog) {
-		this.parameters("dialog");
+		this.properties("dialog");
 		this.dialog(dialog);
 	}
 }
 
 class Arm extends ChainLink {
 	initialize(side) {
-		this.parameters("side");
+		this.properties("side");
 		this.side(side);
 	}
 }
@@ -32,7 +32,7 @@ describe("chainLink.link", () => {
 		person.thought().should.be.instanceOf(Thought);
 	});
 
-	it("should forward the call's parameters to the link constructor", () => {
+	it("should forward the call's properties to the link constructor", () => {
 		const dialog = "I'm Hungry!";
 		const thought = person.thought(dialog);
 

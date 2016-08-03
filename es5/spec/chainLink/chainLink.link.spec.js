@@ -46,7 +46,7 @@ var Thought = function (_ChainLink2) {
 	_createClass(Thought, [{
 		key: "initialize",
 		value: function initialize(dialog) {
-			this.parameters("dialog");
+			this.properties("dialog");
 			this.dialog(dialog);
 		}
 	}]);
@@ -66,7 +66,7 @@ var Arm = function (_ChainLink3) {
 	_createClass(Arm, [{
 		key: "initialize",
 		value: function initialize(side) {
-			this.parameters("side");
+			this.properties("side");
 			this.side(side);
 		}
 	}]);
@@ -85,7 +85,7 @@ describe("chainLink.link", function () {
 		person.thought().should.be.instanceOf(Thought);
 	});
 
-	it("should forward the call's parameters to the link constructor", function () {
+	it("should forward the call's properties to the link constructor", function () {
 		var dialog = "I'm Hungry!";
 		var thought = person.thought(dialog);
 

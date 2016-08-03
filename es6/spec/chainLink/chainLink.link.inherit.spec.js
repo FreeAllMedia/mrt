@@ -2,8 +2,8 @@ import ChainLink from "../../lib/chainLink/chainLink.js";
 
 class Person extends ChainLink {
 	initialize() {
-		this.parameters("dna", "color");
-		this.parameters("numb").asProperty;
+		this.properties("dna", "color");
+		this.properties("numb").asProperty;
 
 		this
 			.link("arm", Arm)
@@ -13,8 +13,8 @@ class Person extends ChainLink {
 
 class Arm extends ChainLink {
 	initialize() {
-		this.parameters("dna", "color");
-		this.parameters("numb").asProperty;
+		this.properties("dna", "color");
+		this.properties("numb").asProperty;
 	}
 }
 
@@ -37,7 +37,7 @@ describe("chainLink.link.inherit", () => {
 		arm = person.arm();
 	});
 
-	it("copy the inherited parameters to the newly instantiated chain link", () => {
+	it("copy the inherited properties to the newly instantiated chain link", () => {
 		const values = {
 			dna: arm.dna(),
 			color: arm.color(),

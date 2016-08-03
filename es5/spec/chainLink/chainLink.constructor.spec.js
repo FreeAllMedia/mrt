@@ -14,21 +14,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
 describe("ChainLink.constructor", function () {
-	var parameters = void 0,
+	var properties = void 0,
 	    chainLink = void 0;
 
 	/* Test Setup For Scope */
 	beforeEach(function () {
 		_chainLink2.default.prototype.initialize = _sinon2.default.spy(_chainLink2.default.prototype.initialize);
 
-		parameters = {
+		properties = {
 			foo: "bar"
 		};
 
-		chainLink = new _chainLink2.default(parameters);
+		chainLink = new _chainLink2.default(properties);
 	});
 
 	it("should call .initialize with the constructor paramters", function () {
-		chainLink.initialize.calledWith(parameters).should.be.true;
+		chainLink.initialize.calledWith(properties).should.be.true;
 	});
 });

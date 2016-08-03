@@ -26,63 +26,31 @@ var Person = function (_ChainLink) {
 	_createClass(Person, [{
 		key: "initialize",
 		value: function initialize() {
-			this.properties("dna", "color");
-			this.properties("numb").asProperty;
-
-			this.link("arm", Arm).inherit("dna", "color", "numb");
+			this.properties("nickNames").aggregate;
 		}
 	}]);
 
 	return Person;
 }(_chainLink2.default);
 
-var Arm = function (_ChainLink2) {
-	_inherits(Arm, _ChainLink2);
-
-	function Arm() {
-		_classCallCheck(this, Arm);
-
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Arm).apply(this, arguments));
-	}
-
-	_createClass(Arm, [{
-		key: "initialize",
-		value: function initialize() {
-			this.properties("dna", "color");
-			this.properties("numb").asProperty;
-		}
-	}]);
-
-	return Arm;
-}(_chainLink2.default);
-
-describe("chainLink.link.inherit", function () {
-	var person = void 0,
-	    arm = void 0,
-	    dna = void 0,
-	    color = void 0;
+describe(".properties.aggregate", function () {
+	var person = void 0;
 
 	beforeEach(function () {
-		dna = "AGDEAGA";
-		color = "skin";
 		person = new Person();
-
-		person.dna(dna).color(color).numb;
-
-		arm = person.arm();
 	});
 
-	it("copy the inherited properties to the newly instantiated chain link", function () {
-		var values = {
-			dna: arm.dna(),
-			color: arm.color(),
-			isNumb: arm.isNumb
-		};
+	it("should be set to an empty array by default", function () {
+		person.nickNames().should.eql([]);
+	});
 
-		values.should.eql({
-			dna: dna,
-			color: color,
-			isNumb: true
-		});
+	it("should return this to enable chaining after setting a value", function () {
+		person.nickNames("The Big Bob").should.equal(person);
+	});
+
+	it("should save aggregate the values of multiple calls", function () {
+		person.nickNames("The Big Bob");
+		person.nickNames("Bobarooni");
+		person.nickNames().should.eql(["The Big Bob", "Bobarooni"]);
 	});
 });

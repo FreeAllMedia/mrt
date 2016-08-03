@@ -16,7 +16,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 describe("ChainLink (custom functions)", function () {
-	var parameters = void 0,
+	var properties = void 0,
 	    chainLink = void 0;
 
 	var CustomChainLink = function (_ChainLink) {
@@ -59,7 +59,7 @@ describe("ChainLink (custom functions)", function () {
 
 
 	beforeEach(function () {
-		chainLink = new CustomChainLink(parameters);
+		chainLink = new CustomChainLink(properties);
 		chainLink.sub;
 	});
 

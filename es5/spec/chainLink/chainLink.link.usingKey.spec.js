@@ -26,7 +26,7 @@ var Arm = function (_ChainLink) {
 	_createClass(Arm, [{
 		key: "initialize",
 		value: function initialize(side) {
-			this.parameters("side");
+			this.properties("side");
 			this.side(side);
 		}
 	}]);

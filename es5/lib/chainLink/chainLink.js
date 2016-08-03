@@ -11,9 +11,9 @@ var _incognito = require("incognito");
 
 var _incognito2 = _interopRequireDefault(_incognito);
 
-var _parameterCollection = require("./parameterCollection.js");
+var _propertyCollection = require("./propertyCollection.js");
 
-var _parameterCollection2 = _interopRequireDefault(_parameterCollection);
+var _propertyCollection2 = _interopRequireDefault(_propertyCollection);
 
 var _connection = require("./connection.js");
 
@@ -23,7 +23,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-exports.ParameterCollection = _parameterCollection2.default;
+exports.ParameterCollection = _propertyCollection2.default;
 
 
 var externalFunction = Symbol();
@@ -33,7 +33,7 @@ var ChainLink = function () {
 		_classCallCheck(this, ChainLink);
 
 		var _ = (0, _incognito2.default)(this);
-		_.parameterCollections = [];
+		_.propertyCollections = [];
 
 		this.links = {
 			all: []
@@ -46,23 +46,23 @@ var ChainLink = function () {
 		key: "initialize",
 		value: function initialize() {}
 	}, {
-		key: "parameters",
-		value: function parameters() {
-			for (var _len = arguments.length, parameterNames = Array(_len), _key = 0; _key < _len; _key++) {
-				parameterNames[_key] = arguments[_key];
+		key: "properties",
+		value: function properties() {
+			for (var _len = arguments.length, propertyNames = Array(_len), _key = 0; _key < _len; _key++) {
+				propertyNames[_key] = arguments[_key];
 			}
 
-			return this[externalFunction].apply(this, ["./chainLink.parameters.js"].concat(parameterNames));
+			return this[externalFunction].apply(this, ["./chainLink.properties.js"].concat(propertyNames));
 		}
 	}, {
-		key: "parameterNames",
-		value: function parameterNames() {
-			return Object.keys(this.parameters());
+		key: "propertyNames",
+		value: function propertyNames() {
+			return Object.keys(this.properties());
 		}
 	}, {
-		key: "parameterCollections",
-		value: function parameterCollections() {
-			return (0, _incognito2.default)(this).parameterCollections;
+		key: "propertyCollections",
+		value: function propertyCollections() {
+			return (0, _incognito2.default)(this).propertyCollections;
 		}
 	}, {
 		key: "link",

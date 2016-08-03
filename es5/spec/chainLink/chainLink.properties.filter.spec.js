@@ -14,75 +14,60 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Person = function (_ChainLink) {
-	_inherits(Person, _ChainLink);
+var Numbers = function (_ChainLink) {
+	_inherits(Numbers, _ChainLink);
 
-	function Person() {
-		_classCallCheck(this, Person);
+	function Numbers() {
+		_classCallCheck(this, Numbers);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Person).apply(this, arguments));
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(Numbers).apply(this, arguments));
 	}
 
-	_createClass(Person, [{
+	_createClass(Numbers, [{
 		key: "initialize",
 		value: function initialize() {
-			this.properties("dna", "color");
-			this.properties("numb").asProperty;
+			this.returnValue = this.properties("values").aggregate.filter(function (value) {
+				return parseInt(value);
+			});
 
-			this.link("arm", Arm).inherit("dna", "color", "numb");
+			this.properties("memoryStore").merge.filter(function (value) {
+				var newValue = parseInt(value);
+				if (newValue) {
+					return newValue;
+				} else {
+					return value;
+				}
+			});
 		}
 	}]);
 
-	return Person;
+	return Numbers;
 }(_chainLink2.default);
 
-var Arm = function (_ChainLink2) {
-	_inherits(Arm, _ChainLink2);
-
-	function Arm() {
-		_classCallCheck(this, Arm);
-
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Arm).apply(this, arguments));
-	}
-
-	_createClass(Arm, [{
-		key: "initialize",
-		value: function initialize() {
-			this.properties("dna", "color");
-			this.properties("numb").asProperty;
-		}
-	}]);
-
-	return Arm;
-}(_chainLink2.default);
-
-describe("chainLink.link.inherit", function () {
-	var person = void 0,
-	    arm = void 0,
-	    dna = void 0,
-	    color = void 0;
+describe(".properties.filter(filterFunction)", function () {
+	var numbers = void 0;
 
 	beforeEach(function () {
-		dna = "AGDEAGA";
-		color = "skin";
-		person = new Person();
-
-		person.dna(dna).color(color).numb;
-
-		arm = person.arm();
+		numbers = new Numbers();
 	});
 
-	it("copy the inherited properties to the newly instantiated chain link", function () {
-		var values = {
-			dna: arm.dna(),
-			color: arm.color(),
-			isNumb: arm.isNumb
-		};
+	it("should return this when setting to enable chaining", function () {
+		numbers.returnValue.should.eql(numbers.propertyCollections()[0]);
+	});
 
-		values.should.eql({
-			dna: dna,
-			color: color,
-			isNumb: true
+	it("should transform raw values", function () {
+		numbers.values("1").values("2").values("3").values().should.have.members([1, 2, 3]);
+	});
+
+	it("should transform properties with merged key values", function () {
+		numbers.memoryStore({
+			"1": "2",
+			"3": "4",
+			"bob": "belcher"
+		}).memoryStore().should.eql({
+			"1": 2,
+			"3": 4,
+			"bob": "belcher"
 		});
 	});
 });

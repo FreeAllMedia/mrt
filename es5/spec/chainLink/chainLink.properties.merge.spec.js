@@ -26,63 +26,47 @@ var Person = function (_ChainLink) {
 	_createClass(Person, [{
 		key: "initialize",
 		value: function initialize() {
-			this.properties("dna", "color");
-			this.properties("numb").asProperty;
-
-			this.link("arm", Arm).inherit("dna", "color", "numb");
+			this.returnValue = this.properties("answers").merge;
 		}
 	}]);
 
 	return Person;
 }(_chainLink2.default);
 
-var Arm = function (_ChainLink2) {
-	_inherits(Arm, _ChainLink2);
-
-	function Arm() {
-		_classCallCheck(this, Arm);
-
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Arm).apply(this, arguments));
-	}
-
-	_createClass(Arm, [{
-		key: "initialize",
-		value: function initialize() {
-			this.properties("dna", "color");
-			this.properties("numb").asProperty;
-		}
-	}]);
-
-	return Arm;
-}(_chainLink2.default);
-
-describe("chainLink.link.inherit", function () {
+describe(".properties.merge", function () {
 	var person = void 0,
-	    arm = void 0,
-	    dna = void 0,
-	    color = void 0;
+	    answersOne = void 0,
+	    answersTwo = void 0;
 
 	beforeEach(function () {
-		dna = "AGDEAGA";
-		color = "skin";
 		person = new Person();
 
-		person.dna(dna).color(color).numb;
-
-		arm = person.arm();
-	});
-
-	it("copy the inherited properties to the newly instantiated chain link", function () {
-		var values = {
-			dna: arm.dna(),
-			color: arm.color(),
-			isNumb: arm.isNumb
+		answersOne = {
+			"Bob": "Builder",
+			"Thomas": "Engine"
 		};
 
-		values.should.eql({
-			dna: dna,
-			color: color,
-			isNumb: true
-		});
+		answersTwo = {
+			"Bob": "Belcher"
+		};
+	});
+
+	it("should be set to an empty object by default", function () {
+		person.answers().should.eql({});
+	});
+
+	it("should return this to enable chaining after setting a value", function () {
+		person.returnValue.should.eql(person.propertyCollections()[0]);
+	});
+
+	it("should save aggregate the values of multiple calls", function () {
+		person.answers(answersOne).answers(answersTwo);
+
+		var expectedMergedAnswers = {
+			"Bob": "Belcher",
+			"Thomas": "Engine"
+		};
+
+		person.answers().should.eql(expectedMergedAnswers);
 	});
 });

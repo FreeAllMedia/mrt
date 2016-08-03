@@ -2,7 +2,7 @@ import ChainLink from "../../lib/chainLink/chainLink.js";
 
 class Arm extends ChainLink {
 	initialize(side) {
-		this.parameters("side");
+		this.properties("side");
 		this.side(side);
 	}
 }

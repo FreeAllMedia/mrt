@@ -78,7 +78,7 @@ var Connection = function () {
 
 			var instance = new (Function.prototype.bind.apply(this.ChainLinkConstructor, [null].concat(_toConsumableArray(options))))();
 
-			var propertyNames = Object.getOwnPropertyNames(this.parentLink.constructor.prototype).filter(function (propertyName) {
+			var methodNames = Object.getOwnPropertyNames(this.parentLink.constructor.prototype).filter(function (propertyName) {
 				switch (propertyName) {
 					case "constructor":
 					case "initialize":
@@ -88,15 +88,15 @@ var Connection = function () {
 				}
 			});
 
-			var parameterNames = this.parentLink.parameterNames();
+			var propertyNames = this.parentLink.propertyNames();
 
-			parameterNames.forEach(function (parameterName) {
-				if (!instance[parameterName]) {
-					instance[parameterName] = _this2.parentLink[parameterName];
+			propertyNames.forEach(function (propertyName) {
+				if (!instance[propertyName]) {
+					instance[propertyName] = _this2.parentLink[propertyName];
 				}
 			});
 
-			propertyNames.forEach(function (propertyName) {
+			methodNames.forEach(function (propertyName) {
 				var propertyDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(_this2.parentLink), propertyName);
 				if (propertyDescriptor.value) {
 					propertyDescriptor.value = propertyDescriptor.value.bind(_this2.parentLink);
@@ -121,8 +121,8 @@ var Connection = function () {
 			if (_.keyName) {
 				var methodLinks = this.parentLink.links[this.methodName] = this.parentLink.links[this.methodName] || {};
 
-				var parameterValues = instance.parameters();
-				var keyValue = parameterValues[_.keyName];
+				var propertyValues = instance.properties();
+				var keyValue = propertyValues[_.keyName];
 
 				methodLinks[keyValue] = instance;
 			} else {
@@ -147,14 +147,14 @@ var Connection = function () {
 							var intoObjects = {};
 
 							intoLink.forEach(function (intoObject) {
-								var keyValue = intoObject.parameters()[_.keyName];
+								var keyValue = intoObject.properties()[_.keyName];
 								intoObjects[keyValue] = intoObject;
 							});
 
 							_this2.parentLink[_.into] = intoObjects;
 						})();
 					} else {
-						var _keyValue = instance.parameters()[_.keyName];
+						var _keyValue = instance.properties()[_.keyName];
 						intoLink[_keyValue] = instance;
 					}
 				} else {
@@ -165,15 +165,15 @@ var Connection = function () {
 			if (_.inherit) {
 				var inheritedParameterNames = _.inherit;
 
-				inheritedParameterNames.forEach(function (parameterName) {
-					var capitalizedMethodName = (0, _jargon2.default)(parameterName).pascal.toString();
+				inheritedParameterNames.forEach(function (propertyName) {
+					var capitalizedMethodName = (0, _jargon2.default)(propertyName).pascal.toString();
 					var getMethodName = "is" + capitalizedMethodName;
 
 					if (_this2.parentLink.hasOwnProperty(getMethodName)) {
-						instance[parameterName];
+						instance[propertyName];
 					} else {
-						var parameterValue = _this2.parentLink[parameterName]();
-						instance[parameterName](parameterValue);
+						var propertyValue = _this2.parentLink[propertyName]();
+						instance[propertyName](propertyValue);
 					}
 				});
 			}
@@ -208,11 +208,11 @@ var Connection = function () {
 	}, {
 		key: "inherit",
 		value: function inherit() {
-			for (var _len3 = arguments.length, parameterNames = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-				parameterNames[_key3] = arguments[_key3];
+			for (var _len3 = arguments.length, propertyNames = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+				propertyNames[_key3] = arguments[_key3];
 			}
 
-			(0, _incognito2.default)(this).inherit = parameterNames;
+			(0, _incognito2.default)(this).inherit = propertyNames;
 		}
 	}, {
 		key: "asProperty",

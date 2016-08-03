@@ -25,11 +25,12 @@ var Person = function (_ChainLink) {
 
 	_createClass(Person, [{
 		key: "initialize",
-		value: function initialize() {
-			this.properties("dna", "color");
-			this.properties("numb").asProperty;
+		value: function initialize(name) {
+			this.properties("name");
+			this.name(name);
 
-			this.link("arm", Arm).inherit("dna", "color", "numb");
+			this.link("arm", Arm);
+			this.link("pet", Pet);
 		}
 	}]);
 
@@ -47,42 +48,50 @@ var Arm = function (_ChainLink2) {
 
 	_createClass(Arm, [{
 		key: "initialize",
-		value: function initialize() {
-			this.properties("dna", "color");
-			this.properties("numb").asProperty;
+		value: function initialize(length) {
+			this.properties("length");
+			this.length(length);
 		}
 	}]);
 
 	return Arm;
 }(_chainLink2.default);
 
-describe("chainLink.link.inherit", function () {
+var Pet = function (_ChainLink3) {
+	_inherits(Pet, _ChainLink3);
+
+	function Pet() {
+		_classCallCheck(this, Pet);
+
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(Pet).apply(this, arguments));
+	}
+
+	_createClass(Pet, [{
+		key: "initialize",
+		value: function initialize(name) {
+			this.properties("name");
+			this.name(name);
+		}
+	}]);
+
+	return Pet;
+}(_chainLink2.default);
+
+describe("chainLink.link.properties", function () {
 	var person = void 0,
-	    arm = void 0,
-	    dna = void 0,
-	    color = void 0;
+	    name = void 0;
 
 	beforeEach(function () {
-		dna = "AGDEAGA";
-		color = "skin";
-		person = new Person();
-
-		person.dna(dna).color(color).numb;
-
-		arm = person.arm();
+		name = "Jake";
+		person = new Person(name);
 	});
 
-	it("copy the inherited properties to the newly instantiated chain link", function () {
-		var values = {
-			dna: arm.dna(),
-			color: arm.color(),
-			isNumb: arm.isNumb
-		};
+	it("should be able to call properties on other links", function () {
+		person.arm().length(5).name().should.eql(name);
+	});
 
-		values.should.eql({
-			dna: dna,
-			color: color,
-			isNumb: true
-		});
+	it("should override identical parent properties", function () {
+		var petName = "Fluffy";
+		person.pet(petName).name().should.eql(petName);
 	});
 });

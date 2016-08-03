@@ -26,63 +26,26 @@ var Person = function (_ChainLink) {
 	_createClass(Person, [{
 		key: "initialize",
 		value: function initialize() {
-			this.properties("dna", "color");
-			this.properties("numb").asProperty;
-
-			this.link("arm", Arm).inherit("dna", "color", "numb");
+			this.properties("name");
+			this.properties("age");
 		}
 	}]);
 
 	return Person;
 }(_chainLink2.default);
 
-var Arm = function (_ChainLink2) {
-	_inherits(Arm, _ChainLink2);
-
-	function Arm() {
-		_classCallCheck(this, Arm);
-
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Arm).apply(this, arguments));
-	}
-
-	_createClass(Arm, [{
-		key: "initialize",
-		value: function initialize() {
-			this.properties("dna", "color");
-			this.properties("numb").asProperty;
-		}
-	}]);
-
-	return Arm;
-}(_chainLink2.default);
-
-describe("chainLink.link.inherit", function () {
-	var person = void 0,
-	    arm = void 0,
-	    dna = void 0,
-	    color = void 0;
+describe("chainLink.propertyCollections()", function () {
+	var person = void 0;
 
 	beforeEach(function () {
-		dna = "AGDEAGA";
-		color = "skin";
 		person = new Person();
-
-		person.dna(dna).color(color).numb;
-
-		arm = person.arm();
 	});
 
-	it("copy the inherited properties to the newly instantiated chain link", function () {
-		var values = {
-			dna: arm.dna(),
-			color: arm.color(),
-			isNumb: arm.isNumb
-		};
+	it("should create a property collection for each call to .properties", function () {
+		person.propertyCollections().length.should.eql(2);
+	});
 
-		values.should.eql({
-			dna: dna,
-			color: color,
-			isNumb: true
-		});
+	it("should return an array of ParameterCollection", function () {
+		person.propertyCollections()[0].should.be.instanceOf(_chainLink.ParameterCollection);
 	});
 });

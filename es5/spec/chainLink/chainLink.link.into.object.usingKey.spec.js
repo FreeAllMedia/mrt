@@ -51,7 +51,7 @@ describe("chainLink.link.into.object.usingKey", function () {
 		_createClass(Thought, [{
 			key: "initialize",
 			value: function initialize() {
-				this.parameters("voice");
+				this.properties("voice");
 				this.voice(voice);
 			}
 		}]);

@@ -14,7 +14,7 @@ describe("chainLink.link.into.object.usingKey", () => {
 
 	class Thought extends ChainLink {
 		initialize() {
-			this.parameters("voice");
+			this.properties("voice");
 			this.voice(voice);
 		}
 	}

@@ -16,7 +16,7 @@ class Person extends ChainLink {
 
 class Arm extends ChainLink {
 	initialize(side) {
-		this.parameters("side");
+		this.properties("side");
 		this.side(side);
 	}
 }
