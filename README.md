@@ -80,14 +80,21 @@ Each function has an associated example that is split into two files:
 MrT interfaces are defined with the `.link` and `.properties` methods.
 
 * A link creates a method that returns a new `ChainLink` object with all of it's parent's methods copied to it.
-* A property sets values on an existing `ChainLink` object. There are several types of properties that can be mixed and matched including: `multi`, `aggregate`, `merged`, and `property`.
+  * There are several enhancements that can be mixed and matched into links including: `key`, `into`, `arguments`, `inherit`, `getter`
+* A property sets values on an existing `ChainLink` object. There are several types of properties that can be mixed and matched including: `multi`, `aggregate`, `merged`, and `boolean`.
 
 ``` javascript
 import ChainLink from "mrt";
 
-class PrimaryLink extends ChainLink {
+class SuperHero extends ChainLink {
   constructor(name) {
     this.properties("name");
+    this.properties("awake").boolean;
+    this.properties("nemeses").aggregate;
+    this.properties("originCity", "currentCity").multi;
+    this.properties("savedCities").multi.aggregate;
+    this.properties("savedCities").multi.aggregate;
+
     this.link("secondary", SecondaryLink);
 
     this.name(name);

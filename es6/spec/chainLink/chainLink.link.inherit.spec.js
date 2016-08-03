@@ -6,8 +6,8 @@ class Person extends ChainLink {
 		this.properties("numb").boolean;
 
 		this
-			.link("arm", Arm)
-			.inherit("dna", "color", "numb");
+		.link("arm", Arm)
+		.inherit("dna", "color", "numb");
 	}
 }
 

@@ -160,7 +160,7 @@ export default class Connection {
 		privateData(this).then = thenFunction;
 	}
 
-	get boolean() {
+	get getter() {
 		Object.defineProperty(this.parentLink, this.methodName, {
 			get: () => {
 				return this[addLink]();

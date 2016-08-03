@@ -2,13 +2,13 @@ import ChainLink from "../../lib/chainLink/chainLink.js";
 
 class Person extends ChainLink {
 	initialize() {
-		this.link("thought", Thought).boolean;
+		this.link("thought", Thought).getter;
 	}
 }
 
 class Thought extends ChainLink {}
 
-describe("chainLink.link.boolean", () => {
+describe("chainLink.link.getter", () => {
 	let person,
 			returnValue;
 

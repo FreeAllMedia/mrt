@@ -9,7 +9,7 @@ export default class ParameterCollection {
 
 		_.aggregate = false;
 		_.multi = false;
-		_.boolean = false;
+		_.isBoolean = false;
 		_.merged = false;
 		_.filters = [];
 
@@ -85,13 +85,13 @@ export default class ParameterCollection {
 	}
 
 	get isBoolean() {
-		return privateData(this).boolean;
+		return privateData(this).isBoolean;
 	}
 
 	get boolean() {
 		const _ = privateData(this);
 
-		_.boolean = true;
+		_.isBoolean = true;
 
 		_.propertyNames.forEach(propertyName => {
 			const capitalizedMethodName = inflect(propertyName).pascal.toString();
