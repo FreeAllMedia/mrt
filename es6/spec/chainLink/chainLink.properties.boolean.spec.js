@@ -2,11 +2,11 @@ import ChainLink from "../../lib/chainLink/chainLink.js";
 
 class Person extends ChainLink {
 	initialize() {
-		this.properties("short").asProperty;
+		this.properties("short").boolean;
 	}
 }
 
-describe(".properties.asProperty", () => {
+describe(".properties.boolean", () => {
 	let person;
 
 	beforeEach(() => {

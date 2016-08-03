@@ -26,7 +26,7 @@ var Person = function (_ChainLink) {
 	_createClass(Person, [{
 		key: "initialize",
 		value: function initialize() {
-			this.link("thought", Thought).asProperty;
+			this.link("thought", Thought).boolean;
 		}
 	}]);
 
@@ -45,7 +45,7 @@ var Thought = function (_ChainLink2) {
 	return Thought;
 }(_chainLink2.default);
 
-describe("chainLink.link.asProperty", function () {
+describe("chainLink.link.boolean", function () {
 	var person = void 0,
 	    returnValue = void 0;
 

@@ -51,8 +51,8 @@ describe("propertyCollection.isMultiValue", function () {
 		propertyCollection.isMultiValue.should.be.false;
 	});
 
-	it("should return true after .multiValue is called", function () {
-		propertyCollection.multiValue;
+	it("should return true after .multi is called", function () {
+		propertyCollection.multi;
 		propertyCollection.isMultiValue.should.be.true;
 	});
 });

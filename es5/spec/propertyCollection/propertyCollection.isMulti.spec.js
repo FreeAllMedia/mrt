@@ -17,7 +17,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* Dependencies */
 
 
-describe("propertyCollection.isProperty", function () {
+describe("propertyCollection.isMulti", function () {
 	var parentLink = void 0,
 	    propertyNames = void 0,
 	    propertyCollection = void 0;
@@ -48,11 +48,11 @@ describe("propertyCollection.isProperty", function () {
 	});
 
 	it("should return false by default", function () {
-		propertyCollection.isProperty.should.be.false;
+		propertyCollection.isMulti.should.be.false;
 	});
 
-	it("should return true after .boolean is called", function () {
-		propertyCollection.boolean;
-		propertyCollection.isProperty.should.be.true;
+	it("should return true after .multi is called", function () {
+		propertyCollection.multi;
+		propertyCollection.isMulti.should.be.true;
 	});
 });

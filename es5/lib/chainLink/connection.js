@@ -46,14 +46,14 @@ var Connection = function () {
 	}
 
 	_createClass(Connection, [{
-		key: "usingKey",
-		value: function usingKey(keyName) {
+		key: "key",
+		value: function key(keyName) {
 			(0, _incognito2.default)(this).keyName = keyName;
 			return this;
 		}
 	}, {
-		key: "usingArguments",
-		value: function usingArguments() {
+		key: "arguments",
+		value: function _arguments() {
 			var _ = (0, _incognito2.default)(this);
 
 			for (var _len = arguments.length, newArguments = Array(_len), _key = 0; _key < _len; _key++) {
@@ -215,7 +215,7 @@ var Connection = function () {
 			(0, _incognito2.default)(this).inherit = propertyNames;
 		}
 	}, {
-		key: "asProperty",
+		key: "boolean",
 		get: function get() {
 			var _this3 = this;
 

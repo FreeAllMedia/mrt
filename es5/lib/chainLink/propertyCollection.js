@@ -29,9 +29,9 @@ var ParameterCollection = function () {
 		_.propertyNames = propertyNames;
 
 		_.aggregate = false;
-		_.multiValue = false;
-		_.asProperty = false;
-		_.merge = false;
+		_.multi = false;
+		_.boolean = false;
+		_.merged = false;
 		_.filters = [];
 
 		this.properties = {};
@@ -46,7 +46,7 @@ var ParameterCollection = function () {
 				}
 
 				if (newValue.length > 0) {
-					if (!_.multiValue) {
+					if (!_.multi) {
 						newValue = newValue[0];
 					}
 
@@ -54,7 +54,7 @@ var ParameterCollection = function () {
 						newValue = filter(newValue);
 					});
 
-					if (_.aggregate || _.multiValue) {
+					if (_.aggregate || _.multi) {
 						if (_.aggregate) {
 							_this.properties[propertyName].push(newValue);
 						} else {
@@ -111,27 +111,27 @@ var ParameterCollection = function () {
 			return this;
 		}
 	}, {
-		key: "isMultiValue",
+		key: "isMulti",
 		get: function get() {
-			return (0, _incognito2.default)(this).multiValue;
+			return (0, _incognito2.default)(this).multi;
 		}
 	}, {
-		key: "multiValue",
+		key: "multi",
 		get: function get() {
-			(0, _incognito2.default)(this).multiValue = true;
+			(0, _incognito2.default)(this).multi = true;
 			return this;
 		}
 	}, {
-		key: "isProperty",
+		key: "isBoolean",
 		get: function get() {
-			return (0, _incognito2.default)(this).asProperty;
+			return (0, _incognito2.default)(this).boolean;
 		}
 	}, {
-		key: "asProperty",
+		key: "boolean",
 		get: function get() {
 			var _ = (0, _incognito2.default)(this);
 
-			_.asProperty = true;
+			_.boolean = true;
 
 			_.propertyNames.forEach(function (propertyName) {
 				var capitalizedMethodName = (0, _jargon2.default)(propertyName).pascal.toString();
@@ -150,13 +150,13 @@ var ParameterCollection = function () {
 			return this;
 		}
 	}, {
-		key: "merge",
+		key: "merged",
 		get: function get() {
 			var _this3 = this;
 
 			var _ = (0, _incognito2.default)(this);
 
-			_.merge = true;
+			_.merged = true;
 
 			_.propertyNames.forEach(function (propertyName) {
 

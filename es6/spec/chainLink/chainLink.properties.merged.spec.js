@@ -2,11 +2,11 @@ import ChainLink from "../../lib/chainLink/chainLink.js";
 
 class Person extends ChainLink {
 	initialize() {
-		this.returnValue = this.properties("answers").merge;
+		this.returnValue = this.properties("answers").merged;
 	}
 }
 
-describe(".properties.merge", () => {
+describe(".properties.merged", () => {
 	let person,
 			answersOne,
 			answersTwo;

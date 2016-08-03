@@ -30,7 +30,7 @@ var Numbers = function (_ChainLink) {
 				return parseInt(value);
 			});
 
-			this.properties("memoryStore").merge.filter(function (value) {
+			this.properties("memoryStore").merged.filter(function (value) {
 				var newValue = parseInt(value);
 				if (newValue) {
 					return newValue;
@@ -59,7 +59,7 @@ describe(".properties.filter(filterFunction)", function () {
 		numbers.values("1").values("2").values("3").values().should.have.members([1, 2, 3]);
 	});
 
-	it("should transform properties with merged key values", function () {
+	it("should transform properties with mergedd key values", function () {
 		numbers.memoryStore({
 			"1": "2",
 			"3": "4",

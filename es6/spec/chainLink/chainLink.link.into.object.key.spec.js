@@ -1,6 +1,6 @@
 import ChainLink from "../../lib/chainLink/chainLink.js";
 
-describe("chainLink.link.into.object.usingKey", () => {
+describe("chainLink.link.into.object.key", () => {
 	let person,
 			returnValue,
 			container,
@@ -8,7 +8,7 @@ describe("chainLink.link.into.object.usingKey", () => {
 
 	class Person extends ChainLink {
 		initialize() {
-			this.link("thought", Thought).into(container).usingKey("voice");
+			this.link("thought", Thought).into(container).key("voice");
 		}
 	}
 

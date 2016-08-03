@@ -26,63 +26,30 @@ var Person = function (_ChainLink) {
 	_createClass(Person, [{
 		key: "initialize",
 		value: function initialize() {
-			this.properties("dna", "color");
-			this.properties("numb").boolean;
-
-			this.link("arm", Arm).inherit("dna", "color", "numb");
+			this.properties("short").boolean;
 		}
 	}]);
 
 	return Person;
 }(_chainLink2.default);
 
-var Arm = function (_ChainLink2) {
-	_inherits(Arm, _ChainLink2);
-
-	function Arm() {
-		_classCallCheck(this, Arm);
-
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Arm).apply(this, arguments));
-	}
-
-	_createClass(Arm, [{
-		key: "initialize",
-		value: function initialize() {
-			this.properties("dna", "color");
-			this.properties("numb").boolean;
-		}
-	}]);
-
-	return Arm;
-}(_chainLink2.default);
-
-describe("chainLink.link.inherit", function () {
-	var person = void 0,
-	    arm = void 0,
-	    dna = void 0,
-	    color = void 0;
+describe(".properties.boolean", function () {
+	var person = void 0;
 
 	beforeEach(function () {
-		dna = "AGDEAGA";
-		color = "skin";
 		person = new Person();
-
-		person.dna(dna).color(color).numb;
-
-		arm = person.arm();
 	});
 
-	it("copy the inherited properties to the newly instantiated chain link", function () {
-		var values = {
-			dna: arm.dna(),
-			color: arm.color(),
-			isNumb: arm.isNumb
-		};
+	it("should return this to enable chaining", function () {
+		person.short.should.equal(person);
+	});
 
-		values.should.eql({
-			dna: dna,
-			color: color,
-			isNumb: true
-		});
+	it("should set an 'is' getter to false by default", function () {
+		person.isShort.should.eql(false);
+	});
+
+	it("should set the properties as a property setter that flips the 'is' getters boolean value", function () {
+		person.short;
+		person.isShort.should.eql(true);
 	});
 });

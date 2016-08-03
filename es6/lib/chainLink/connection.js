@@ -22,12 +22,12 @@ export default class Connection {
 		this.parentLink[this.methodName] = this.method;
 	}
 
-	usingKey(keyName) {
+	key(keyName) {
 		privateData(this).keyName = keyName;
 		return this;
 	}
 
-	usingArguments(...newArguments) {
+	arguments(...newArguments) {
 		const _ = privateData(this);
 		_.useArguments = _.useArguments.concat(newArguments);
 		return this;
@@ -160,7 +160,7 @@ export default class Connection {
 		privateData(this).then = thenFunction;
 	}
 
-	get asProperty() {
+	get boolean() {
 		Object.defineProperty(this.parentLink, this.methodName, {
 			get: () => {
 				return this[addLink]();

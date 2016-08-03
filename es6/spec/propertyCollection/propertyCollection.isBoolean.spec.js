@@ -2,7 +2,7 @@
 import ChainLink, { ParameterCollection } from "../../lib/chainLink/chainLink.js";
 import sinon from "sinon";
 
-describe("propertyCollection.isProperty", () => {
+describe("propertyCollection.isBoolean", () => {
 	let parentLink,
 			propertyNames,
 			propertyCollection;
@@ -24,11 +24,11 @@ describe("propertyCollection.isProperty", () => {
 	});
 
 	it("should return false by default", () => {
-		propertyCollection.isProperty.should.be.false;
+		propertyCollection.isBoolean.should.be.false;
 	});
 
-	it("should return true after .asProperty is called", () => {
-		propertyCollection.asProperty;
-		propertyCollection.isProperty.should.be.true;
+	it("should return true after .boolean is called", () => {
+		propertyCollection.boolean;
+		propertyCollection.isBoolean.should.be.true;
 	});
 });

@@ -2,11 +2,11 @@ import ChainLink from "../../lib/chainLink/chainLink.js";
 
 class Person extends ChainLink {
 	initialize() {
-		this.properties("placesLived").multiValue.aggregate;
+		this.properties("placesLived").multi.aggregate;
 	}
 }
 
-describe(".properties.multiValue.aggregate", () => {
+describe(".properties.multi.aggregate", () => {
 	let person;
 
 	beforeEach(() => {

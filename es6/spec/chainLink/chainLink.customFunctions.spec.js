@@ -9,7 +9,7 @@ describe("ChainLink (custom functions)", () => {
 		initialize() {
 			this
 				.link("sub", SubLink)
-				.asProperty;
+				.boolean;
 		}
 		get something() {
 			return true;

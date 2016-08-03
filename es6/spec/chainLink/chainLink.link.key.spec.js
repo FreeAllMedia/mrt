@@ -7,14 +7,14 @@ class Arm extends ChainLink {
 	}
 }
 
-describe("chainLink.link.usingKey", () => {
+describe("chainLink.link.key", () => {
 	let person,
 			leftArm;
 
 	describe("(without .into set)", () => {
 		class Person extends ChainLink {
 			initialize() {
-				this.link("arm", Arm).usingKey("side");
+				this.link("arm", Arm).key("side");
 			}
 		}
 
@@ -28,7 +28,7 @@ describe("chainLink.link.usingKey", () => {
 	describe("(with .into set)", () => {
 		class Person extends ChainLink {
 			initialize() {
-				this.link("arm", Arm).into("arms").usingKey("side");
+				this.link("arm", Arm).into("arms").key("side");
 			}
 		}
 

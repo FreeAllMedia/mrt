@@ -26,63 +26,27 @@ var Person = function (_ChainLink) {
 	_createClass(Person, [{
 		key: "initialize",
 		value: function initialize() {
-			this.properties("dna", "color");
-			this.properties("numb").boolean;
-
-			this.link("arm", Arm).inherit("dna", "color", "numb");
+			this.properties("originCity").multi;
 		}
 	}]);
 
 	return Person;
 }(_chainLink2.default);
 
-var Arm = function (_ChainLink2) {
-	_inherits(Arm, _ChainLink2);
-
-	function Arm() {
-		_classCallCheck(this, Arm);
-
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(Arm).apply(this, arguments));
-	}
-
-	_createClass(Arm, [{
-		key: "initialize",
-		value: function initialize() {
-			this.properties("dna", "color");
-			this.properties("numb").boolean;
-		}
-	}]);
-
-	return Arm;
-}(_chainLink2.default);
-
-describe("chainLink.link.inherit", function () {
-	var person = void 0,
-	    arm = void 0,
-	    dna = void 0,
-	    color = void 0;
+describe(".properties.multi", function () {
+	var person = void 0;
 
 	beforeEach(function () {
-		dna = "AGDEAGA";
-		color = "skin";
 		person = new Person();
-
-		person.dna(dna).color(color).numb;
-
-		arm = person.arm();
 	});
 
-	it("copy the inherited properties to the newly instantiated chain link", function () {
-		var values = {
-			dna: arm.dna(),
-			color: arm.color(),
-			isNumb: arm.isNumb
-		};
+	it("should return this to enable chaining after setting a value", function () {
+		person.originCity("Gotham", "New Jersey").should.equal(person);
+	});
 
-		values.should.eql({
-			dna: dna,
-			color: color,
-			isNumb: true
-		});
+	it("should save the latest provided multiple values", function () {
+		person.originCity("Metropolis", "Delaware");
+		person.originCity("Gotham", "New Jersey");
+		person.originCity().should.eql(["Gotham", "New Jersey"]);
 	});
 });

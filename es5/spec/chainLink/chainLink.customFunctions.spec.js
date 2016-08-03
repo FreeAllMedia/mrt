@@ -31,7 +31,7 @@ describe("ChainLink (custom functions)", function () {
 		_createClass(CustomChainLink, [{
 			key: "initialize",
 			value: function initialize() {
-				this.link("sub", SubLink).asProperty;
+				this.link("sub", SubLink).boolean;
 			}
 		}, {
 			key: "something",

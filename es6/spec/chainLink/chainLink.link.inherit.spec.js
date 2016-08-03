@@ -3,7 +3,7 @@ import ChainLink from "../../lib/chainLink/chainLink.js";
 class Person extends ChainLink {
 	initialize() {
 		this.properties("dna", "color");
-		this.properties("numb").asProperty;
+		this.properties("numb").boolean;
 
 		this
 			.link("arm", Arm)
@@ -14,7 +14,7 @@ class Person extends ChainLink {
 class Arm extends ChainLink {
 	initialize() {
 		this.properties("dna", "color");
-		this.properties("numb").asProperty;
+		this.properties("numb").boolean;
 	}
 }
 

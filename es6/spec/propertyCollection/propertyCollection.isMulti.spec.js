@@ -2,7 +2,7 @@
 import ChainLink, { ParameterCollection } from "../../lib/chainLink/chainLink.js";
 import sinon from "sinon";
 
-describe("propertyCollection.isMultiValue", () => {
+describe("propertyCollection.isMulti", () => {
 	let parentLink,
 			propertyNames,
 			propertyCollection;
@@ -24,11 +24,11 @@ describe("propertyCollection.isMultiValue", () => {
 	});
 
 	it("should return false by default", () => {
-		propertyCollection.isMultiValue.should.be.false;
+		propertyCollection.isMulti.should.be.false;
 	});
 
-	it("should return true after .multiValue is called", () => {
-		propertyCollection.multiValue;
-		propertyCollection.isMultiValue.should.be.true;
+	it("should return true after .multi is called", () => {
+		propertyCollection.multi;
+		propertyCollection.isMulti.should.be.true;
 	});
 });

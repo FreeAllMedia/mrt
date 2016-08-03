@@ -7,7 +7,7 @@ class Numbers extends ChainLink {
 			.filter(value => parseInt(value));
 
 		this.properties("memoryStore")
-			.merge
+			.merged
 			.filter(value => {
 				const newValue = parseInt(value);
 				if (newValue) {
@@ -39,7 +39,7 @@ describe(".properties.filter(filterFunction)", () => {
 		.should.have.members([1, 2, 3]);
 	});
 
-	it("should transform properties with merged key values", () => {
+	it("should transform properties with mergedd key values", () => {
 		numbers
 		.memoryStore({
 			"1": "2",

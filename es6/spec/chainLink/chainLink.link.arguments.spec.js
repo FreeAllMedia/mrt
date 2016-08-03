@@ -2,7 +2,7 @@ import ChainLink from "../../lib/chainLink/chainLink.js";
 
 class Person extends ChainLink {
 	initialize() {
-		this.link("thought", Thought).usingArguments(this);
+		this.link("thought", Thought).arguments(this);
 	}
 }
 
@@ -12,7 +12,7 @@ class Thought extends ChainLink {
 	}
 }
 
-describe("chainLink.link.usingArguments", () => {
+describe("chainLink.link.arguments", () => {
 	let person,
 			thought;
 
@@ -23,7 +23,7 @@ describe("chainLink.link.usingArguments", () => {
 
 	it("should return this to enable chaining", () => {
 		const connection = person.link("thought", Thought);
-		connection.usingArguments(this).should.eql(connection);
+		connection.arguments(this).should.eql(connection);
 	});
 
 	it("should add the newly instantiated chain link to the designated collection", () => {

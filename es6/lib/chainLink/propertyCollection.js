@@ -8,9 +8,9 @@ export default class ParameterCollection {
 		_.propertyNames = propertyNames;
 
 		_.aggregate = false;
-		_.multiValue = false;
-		_.asProperty = false;
-		_.merge = false;
+		_.multi = false;
+		_.boolean = false;
+		_.merged = false;
 		_.filters = [];
 
 		this.properties = {};
@@ -21,7 +21,7 @@ export default class ParameterCollection {
 
 			_.parentLink[propertyName] = (...newValue) => {
 				if (newValue.length > 0) {
-					if (!_.multiValue) {
+					if (!_.multi) {
 						newValue = newValue[0];
 					}
 
@@ -29,7 +29,7 @@ export default class ParameterCollection {
 						newValue = filter(newValue);
 					});
 
-					if (_.aggregate || _.multiValue) {
+					if (_.aggregate || _.multi) {
 						if (_.aggregate) {
 							this.properties[propertyName].push(newValue);
 						} else {
@@ -70,12 +70,12 @@ export default class ParameterCollection {
 		return this;
 	}
 
-	get isMultiValue() {
-		return privateData(this).multiValue;
+	get isMulti() {
+		return privateData(this).multi;
 	}
 
-	get multiValue() {
-		privateData(this).multiValue = true;
+	get multi() {
+		privateData(this).multi = true;
 		return this;
 	}
 
@@ -84,14 +84,14 @@ export default class ParameterCollection {
 		return this;
 	}
 
-	get isProperty() {
-		return privateData(this).asProperty;
+	get isBoolean() {
+		return privateData(this).boolean;
 	}
 
-	get asProperty() {
+	get boolean() {
 		const _ = privateData(this);
 
-		_.asProperty = true;
+		_.boolean = true;
 
 		_.propertyNames.forEach(propertyName => {
 			const capitalizedMethodName = inflect(propertyName).pascal.toString();
@@ -110,10 +110,10 @@ export default class ParameterCollection {
 		return this;
 	}
 
-	get merge() {
+	get merged() {
 		const _ = privateData(this);
 
-		_.merge = true;
+		_.merged = true;
 
 		_.propertyNames.forEach(propertyName => {
 
