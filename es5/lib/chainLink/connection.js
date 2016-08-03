@@ -98,8 +98,12 @@ var Connection = function () {
 
 			methodNames.forEach(function (propertyName) {
 				var propertyDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(_this2.parentLink), propertyName);
-				//if (propertyDescriptor.value) { propertyDescriptor.value = propertyDescriptor.value.bind(this.parentLink); }
-				//if (propertyDescriptor.get) { propertyDescriptor.get = propertyDescriptor.get.bind(this.parentLink); }
+				if (propertyDescriptor.value) {
+					propertyDescriptor.value = propertyDescriptor.value.bind(_this2.parentLink);
+				}
+				if (propertyDescriptor.get) {
+					propertyDescriptor.get = propertyDescriptor.get.bind(_this2.parentLink);
+				}
 				Object.defineProperty(instance, propertyName, propertyDescriptor);
 			});
 

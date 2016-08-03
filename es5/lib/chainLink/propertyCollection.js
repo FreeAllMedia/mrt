@@ -30,7 +30,7 @@ var ParameterCollection = function () {
 
 		_.aggregate = false;
 		_.multi = false;
-		_.boolean = false;
+		_.isBoolean = false;
 		_.merged = false;
 		_.filters = [];
 
@@ -124,14 +124,14 @@ var ParameterCollection = function () {
 	}, {
 		key: "isBoolean",
 		get: function get() {
-			return (0, _incognito2.default)(this).boolean;
+			return (0, _incognito2.default)(this).isBoolean;
 		}
 	}, {
 		key: "boolean",
 		get: function get() {
 			var _ = (0, _incognito2.default)(this);
 
-			_.boolean = true;
+			_.isBoolean = true;
 
 			_.propertyNames.forEach(function (propertyName) {
 				var capitalizedMethodName = (0, _jargon2.default)(propertyName).pascal.toString();

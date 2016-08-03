@@ -6,12 +6,12 @@
 
 MrT is a tool for making simple and complex chained interfaces on javascript libraries.
 
-The resulting syntax is easy-to-read while still being flexible and 100% [vanilla-js](https://vanilla-js.org):
+The resulting syntax is easy-to-read while still being flexible and 100% [vanilla-js](https://vanilla-js.org).
 
 ``` javascript
 // Example interface for a web server
 
-const server = new Server()
+const webServer = new WebServer()
 
 .public
   .get("/account")
@@ -32,32 +32,6 @@ const server = new Server()
 .listen(3000);
 ```
 
-``` javascript
-// Example interface for a game backend
-
-const game = new Game("Robots vs Aliens")
-
-.army("Robots")
-  .workers(24)
-    .tools
-      .shovels(10)
-      .laserDrills(2)
-  .warriors(55)
-    .weapons
-      .pistols(55)
-      .rifles(55)
-
-.army("Sluggoids")
-  .workers(84)
-    .tools
-      .shovels(42)
-      .laserDrills(9)
-  .warriors(21)
-    .weapons
-      .pistols(21)
-      .rifles(21);
-```
-
 # Installation
 
 The easiest and fastest way to install MrT is through the `node package manager`:
@@ -68,262 +42,305 @@ $ npm install mrt --save
 
 # API Guide
 
-**Note:** In each of the following examples we're going to use MrT to build the programmatic interface for a game backend, however it is a generic tool and works just as well for non-game-related projects.
+## `.initialize(...constructorArguments)`
 
-Each function has an associated example that is split into two files:
+Whenever one constructor extends another, `.super` must be called in the extended object's constructor before `this` can be called.
 
-* `app.js` uses the interface defined in `game.js`.
-* `game.js` defines the interface that is used in `app.js`
-
-## `.properties` and `.link`
-
-MrT interfaces are defined with the `.link` and `.properties` methods.
-
-* A link creates a method that returns a new `ChainLink` object with all of it's parent's methods copied to it.
-  * There are several enhancements that can be mixed and matched into links including: `key`, `into`, `arguments`, `inherit`, `getter`
-* A property sets values on an existing `ChainLink` object. There are several types of properties that can be mixed and matched including: `multi`, `aggregate`, `merged`, and `boolean`.
+This can be a gotcha for many developers, so MrT has a built-in pseudo-constructor called `.initialize` that can be used by extended objects without the need to call `.super`.
 
 ``` javascript
 import ChainLink from "mrt";
 
-class SuperHero extends ChainLink {
+// Without using initialize
+class Person extends ChainLink {
   constructor(name) {
+    super(name);
     this.properties("name");
-    this.properties("awake").boolean;
-    this.properties("nemeses").aggregate;
-    this.properties("originCity", "currentCity").multi;
-    this.properties("savedCities").multi.aggregate;
-    this.properties("savedCities").multi.aggregate;
-
-    this.link("secondary", SecondaryLink);
-
     this.name(name);
   }
 }
 
-class SecondaryLink extends ChainLink {
-  constructor(...values) {
-    this.properties("values").multiValue;
-    this.values(...values);
+// Using initialize
+class Person extends ChainLink {
+  initialize(name) {
+    this.properties("name");
+    this.name(name);
   }
 }
-
-const primary = new PrimaryLink("John");
-const secondary = primary.secondary(1, 2, 3);
 ```
 
 ## `.properties(...propertyNames)`
 
+Define a simple chainable property that sets and gets a raw value:
 
+``` javascript
+class Person extends ChainLink {
+  initialize() {
+    this.properties("name");
+  }
+}
+
+const person = new Person();
+
+person.name("Jana");
+person.name(); // "Jana"
+```
+
+### `.multi`
+
+``` javascript
+class Person extends ChainLink {
+  initialize() {
+    this.properties("nicknames").multi;
+  }
+}
+
+const person = new Person();
+
+person.nicknames("Jana Banana", "Jananana");
+person.nicknames(); // ["Jana Banana", "Jananana"]
+```
+
+### `.aggregate`
+
+``` javascript
+class Person extends ChainLink {
+  initialize() {
+    this.properties("nicknames").aggregate;
+  }
+}
+
+const person = new Person();
+
+person.nicknames("Jana Banana");
+person.nicknames("Jananana");
+person.nicknames(); // ["Jana Banana", "Jananana"]
+```
+
+### `.multi.aggregate`
+
+``` javascript
+class Person extends ChainLink {
+  initialize() {
+    this.properties("citiesVisited").multi.aggregate;
+  }
+}
+
+const person = new Person();
+
+person.citiesVisited("Toledo", "OH");
+person.citiesVisited("Colorado Springs", "CO");
+person.citiesVisited(); // [["Toledo", "OH"], ["Colorado Springs", "CO"]]
+```
+
+### `.merged`
+
+``` javascript
+class Person extends ChainLink {
+  initialize() {
+    this.properties("favoriteCities").merged;
+  }
+}
+
+const person = new Person();
+
+person.mergedValues({"CO": "Colorado Springs", "KS": "Wichita"});
+person.mergedValues({"CO": "Boulder"});
+person.mergedValues(); // {"CO": "Boulder", "KS": "Wichita"}
+```
+
+### `.filter`
+
+``` javascript
+class Person extends ChainLink {
+  initialize() {
+    this.properties("favoriteNumber").filter(this.castIntegers);
+  }
+
+  castIntegers(value) {
+    const newValue = parseInt(value);
+    if (newValue) {
+      return newValue;
+    } else {
+      return value;
+    }
+  }
+}
+
+const person = new Person();
+
+person.favoriteNumber("1");
+person.favoriteNumber(); // 1
+```
 
 ## `.link(linkName, linkConstructor)`
 
+A link creates a method which returns a new instance of the provided `linkConstructor`.
+
+The new instance is given a copy of all methods from the parent link. This is what enables MrT to chain multiple tiers.
 
 ``` javascript
-// app.js
-
-import Game from "./game.js";
-
-const game = new Game("Robots vs Aliens")
-
-.army("Robots")
-.army("Sluggoids");
-
-game.army().should.eql(["Robots", "Sluggoids"]);
-```
-
-``` javascript
-// game.js
-
 import ChainLink from "mrt";
 
-class Game extends ChainLink {
-  initialize(name) {
-    this.parameters("name");
-    this.parameters("army").aggregate;
-
-    this.name(name);
-  }
-}
-
-export default Game;
-```
-
-**Object-Oriented Chained Interfaces**
-
-``` javascript
-// app.js
-
-import Game from "./game.js";
-
-const game = new Game("Robots vs Aliens")
-
-.army("Robots")
-  .workers(24)
-  .warriors(55)
-.army("Sluggoids")
-  .workers(84)
-  .warriors(21);
-
-const robots = game.armies["Robots"];
-const sluggoids = game.armies["Sluggoids"];
-const zappdons = game.army("Zappdons");
-
-zappdons.workers(12).warriors(86);
-
-robots.workers(); // 24
-sluggoids.workers(); // 84
-zappdons.workers(); // 12
-```
-
-``` javascript
-// game.js
-
-import ChainLink from "mrt";
-
-class Game extends ChainLink {
-  initialize(name) {
-    this.parameters("name");
-    this.link("army", Army).merge.into("armies");
-    this.name(name);
-  }
-}
-
-export default Game;
-
-class Army extends ChainLink {
-  initialize(name) {
-    this.parameters(
-      "name",
-      "workers",
-      "warriors"
-    );
-    this.name(name);
-  }
-}
-```
-
-**Multi-Tiered Object-Oriented Chained Interfaces**
-
-``` javascript
-// app.js
-
-import Game from "./game.js";
-
-const game = new Game("Robots vs Aliens")
-
-.army("Robots")
-  .workers(24)
-    .tools
-      .shovels(10)
-      .laserDrills(2)
-  .warriors(55)
-    .weapons
-      .pistols(55)
-      .rifles(55)
-
-.army("Sluggoids")
-  .workers(84)
-    .tools
-      .shovels(42)
-      .laserDrills(9)
-  .warriors(21)
-    .weapons
-      .pistols(21)
-      .rifles(21);
-
-/**
- * Each link returns a portable object:
- */
-
-const zappdons = game.army("Zappdons");
-
-const zappdonsWorkers = zappdons.workers(1);
-const zappdonsWarriors = zappdons.warriors(100);
-
-const zappdonsWorkersTools = zappdonsWorkers.tools;
-const zappdonsWarriorsWeapons = zappdonsWarriors.weapons;
-
-zappdonsWorkersTools.shovels(1).laserDrills(0);
-
-zappdonsWorkersWeapons
-  .pistols(100)
-  .rifles(100);
-```
-
-``` javascript
-// game.js
-
-import ChainLink from "mrt";
-
-class Game extends ChainLink {
-  initialize(name) {
-    this.parameters("name");
-    this.link("army", Army).merge.into("armies");
-    this.name(name);
-  }
-}
-
-export default Game;
-
-/**
- * Army
- */
-
-class Army extends ChainLink {
-  initialize(name) {
-    this.parameters("name");
-    this.name(name);
-
-    this.link("workers", Workers);
-    this.link("warriors", Warriors);
-  }
-}
-
-/**
- * Units
- */
-
-class Unit extends ChainLink {
-  constructor(count) {
-    this.parameters("count");
-    this.initialize(count);
-  }
-}
-
-class Workers extends Unit {
-  initialize(count) {
-    this.parameters();
-    this.count(count);
-    this.link("tools", Tools).asProperty;
-  }
-}
-
-class Warriors extends Unit {
-  initialize(count) {
-    this.parameters();
-    this.count(count);
-    this.link("weapons", Weapons).asProperty;
-  }
-}
-
-/**
- * Equipment
- */
-
-class Tools extends ChainLink {
+class Car extends ChainLink {
   initialize() {
-    this.parameters("shovels", "laserDrills");
+    this.link("wheel", Wheel);
   }
 }
 
-class Weapons extends ChainLink {
+class Wheel extends ChainLink {
+  initialize(diameter) {
+    this.properties("diameter");
+    this.diameter(diameter);
+  }
+}
+
+const car = new Car();
+
+const wheel1 = car.wheel(10);
+
+car
+.wheel(10)
+.wheel(10)
+.wheel(10);
+```
+
+### `.getter`
+
+``` javascript
+import ChainLink from "mrt";
+
+class Car extends ChainLink {
   initialize() {
-    this.parameters("pistols", "rifles");
+    this.link("wheel", Wheel).getter;
+  }
+}
+
+class Wheel extends ChainLink {}
+
+const car = new Car();
+
+const wheel1 = car.wheel;
+
+car
+.wheel
+.wheel
+.wheel;
+```
+
+### `.inherit(...propertyNames)`
+
+``` javascript
+import ChainLink from "mrt";
+
+class Car extends ChainLink {
+  initialize() {
+    this.properties("color");
+    this.link("door", Door).inherit("color");
+  }
+}
+
+class Door extends ChainLink {}
+
+const car = new Car();
+
+car.color("Red");
+
+const door = car.door;
+
+door.color(); // "Red"
+```
+
+### `.into(collectionName)`
+
+``` javascript
+import ChainLink from "mrt";
+
+class Car extends ChainLink {
+  initialize() {
+    this.properties("color");
+    this.link("door", Door).into("doors");
+  }
+}
+
+class Door extends ChainLink {}
+
+const car = new Car();
+
+car
+.door
+.door;
+
+car.doors.length; // 2
+```
+
+### `.into(collectionName).key(keyName)`
+
+``` javascript
+import ChainLink from "mrt";
+
+class Car extends ChainLink {
+  initialize() {
+    this.properties("color");
+    this.link("door", Door).into("doors").key("side");
+  }
+}
+
+class Door extends ChainLink {
+  initialize(side) {
+    this.properties("side");
+    this.side(side);
+  }
+}
+
+const car = new Car();
+
+car
+.door("left")
+.door("right");
+
+car.doors.left; // left door object
+car.doors.right; // right door object
+```
+
+### `.then(thenFunction)`
+
+``` javascript
+import ChainLink from "mrt";
+
+class Car extends ChainLink {
+  initialize() {
+    this.properties("color");
+    this.link("door", Door).then(newDoor => {
+      // Called each time a link is created
+    });
+  }
+}
+
+class Door extends ChainLink {}
+
+const car = new Car();
+
+car
+.door()
+.door();
+```
+
+### `.arguments(...passedArguments)`
+
+``` javascript
+import ChainLink from "mrt";
+
+class Car extends ChainLink {
+  initialize() {
+    this.properties("color");
+    this.link("door", Door).arguments(this);
+  }
+}
+
+class Door extends ChainLink {
+  initialize(car) {
+    car; // Automatically passed by .arguments(this) in Car
   }
 }
 ```
-
-# Getting Started
-
-MrT is used by
