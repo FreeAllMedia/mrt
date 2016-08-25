@@ -4,8 +4,7 @@
   "description": "Build complex interfaces with ease.",
   "main": "index.js",
   "scripts": {
-    "test": "gulp test",
-    "postinstall": "postinstall-build es5 'gulp build'"
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
@@ -59,7 +58,6 @@
   },
   "dependencies": {
     "incognito": "^0.1.4",
-    "jargon": "^0.2.0",
-    "postinstall-build": "^0.2.1"
+    "jargon": "^0.2.0"
   }
 }
