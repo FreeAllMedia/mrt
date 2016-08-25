@@ -1,7 +1,7 @@
 {
   "name": "mrt",
   "version": "0.3.0",
-  "description": "Build complex interfaces with ease.",
+  "description": "Helps build expressive chained interfaces.",
   "main": "index.js",
   "scripts": {
     "test": "gulp test"
