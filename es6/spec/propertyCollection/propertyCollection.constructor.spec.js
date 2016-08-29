@@ -1,17 +1,17 @@
 /* Dependencies */
-import ChainLink, { ParameterCollection } from "../../lib/chainLink/chainLink.js";
+import Component, { PropertyCollection } from "../../lib/component/component.js";
 import sinon from "sinon";
 
-describe("ParameterCollection.constructor", () => {
+describe("PropertyCollection.constructor", () => {
 	let parentLink,
 			propertyNames,
 			propertyCollection;
 
-	class ParentLink extends ChainLink {}
+	class ParentLink extends Component {}
 
 	/* Test Setup For Scope */
 	beforeEach(() => {
-		ParameterCollection.prototype.initialize = sinon.spy(ParameterCollection.prototype.initialize);
+		PropertyCollection.prototype.initialize = sinon.spy(PropertyCollection.prototype.initialize);
 
 		propertyNames = [
 			"name",
@@ -20,10 +20,10 @@ describe("ParameterCollection.constructor", () => {
 
 		parentLink = new ParentLink();
 
-		propertyCollection = new ParameterCollection(parentLink, propertyNames);
+		propertyCollection = new PropertyCollection(parentLink, propertyNames);
 	});
 
-	it("should return an instance of ParameterCollection", () => {
-		propertyCollection.should.be.instanceOf(ParameterCollection);
+	it("should return an instance of PropertyCollection", () => {
+		propertyCollection.should.be.instanceOf(PropertyCollection);
 	});
 });

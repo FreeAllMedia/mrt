@@ -326,7 +326,7 @@ car
 .door();
 ```
 
-### `.arguments(...passedArguments)`
+### `.apply(...passedArguments)`
 
 ``` javascript
 import ChainLink from "mrt";
@@ -334,13 +334,18 @@ import ChainLink from "mrt";
 class Car extends ChainLink {
   initialize() {
     this.properties("color");
-    this.link("door", Door).arguments(this);
+    this.link("door", Door).apply(this);
   }
 }
 
 class Door extends ChainLink {
-  initialize(car) {
+  initialize(car, color) {
     car; // Automatically passed by .arguments(this) in Car
+		color; // "green"
   }
 }
+
+const car = new Car();
+
+car.door("green");
 ```
