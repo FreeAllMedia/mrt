@@ -1,1 +1,1 @@
-module.exports = require("./es5/lib/chainLink/chainLink.js");
+module.exports = require("./es5/lib/component/component.js");
