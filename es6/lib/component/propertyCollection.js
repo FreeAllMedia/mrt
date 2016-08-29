@@ -13,6 +13,7 @@ export default class PropertyCollection {
 		_.merged = false;
 		_.flat = false;
 		_.filters = [];
+		_.thens = [];
 
 		this.properties = {};
 
@@ -43,6 +44,11 @@ export default class PropertyCollection {
 					} else {
 						this.properties[propertyName] = newValue;
 					}
+
+					_.thens.forEach(then => {
+						then(newValue);
+					});
+
 					return parentLink;
 				} else {
 					return this.properties[propertyName];
@@ -112,6 +118,11 @@ export default class PropertyCollection {
 			});
 		});
 
+		return this;
+	}
+
+	then(thenFunction) {
+		privateData(this).thens.push(thenFunction);
 		return this;
 	}
 
