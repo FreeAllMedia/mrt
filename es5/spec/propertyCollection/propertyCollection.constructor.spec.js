@@ -1,8 +1,8 @@
 "use strict";
 
-var _chainLink = require("../../lib/chainLink/chainLink.js");
+var _component = require("../../lib/component/component.js");
 
-var _chainLink2 = _interopRequireDefault(_chainLink);
+var _component2 = _interopRequireDefault(_component);
 
 var _sinon = require("sinon");
 
@@ -17,13 +17,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* Dependencies */
 
 
-describe("ParameterCollection.constructor", function () {
+describe("PropertyCollection.constructor", function () {
 	var parentLink = void 0,
 	    propertyNames = void 0,
 	    propertyCollection = void 0;
 
-	var ParentLink = function (_ChainLink) {
-		_inherits(ParentLink, _ChainLink);
+	var ParentLink = function (_Component) {
+		_inherits(ParentLink, _Component);
 
 		function ParentLink() {
 			_classCallCheck(this, ParentLink);
@@ -32,22 +32,22 @@ describe("ParameterCollection.constructor", function () {
 		}
 
 		return ParentLink;
-	}(_chainLink2.default);
+	}(_component2.default);
 
 	/* Test Setup For Scope */
 
 
 	beforeEach(function () {
-		_chainLink.ParameterCollection.prototype.initialize = _sinon2.default.spy(_chainLink.ParameterCollection.prototype.initialize);
+		_component.PropertyCollection.prototype.initialize = _sinon2.default.spy(_component.PropertyCollection.prototype.initialize);
 
 		propertyNames = ["name", "age"];
 
 		parentLink = new ParentLink();
 
-		propertyCollection = new _chainLink.ParameterCollection(parentLink, propertyNames);
+		propertyCollection = new _component.PropertyCollection(parentLink, propertyNames);
 	});
 
-	it("should return an instance of ParameterCollection", function () {
-		propertyCollection.should.be.instanceOf(_chainLink.ParameterCollection);
+	it("should return an instance of PropertyCollection", function () {
+		propertyCollection.should.be.instanceOf(_component.PropertyCollection);
 	});
 });

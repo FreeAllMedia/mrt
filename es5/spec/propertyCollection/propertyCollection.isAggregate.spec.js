@@ -1,8 +1,8 @@
 "use strict";
 
-var _chainLink = require("../../lib/chainLink/chainLink.js");
+var _component = require("../../lib/component/component.js");
 
-var _chainLink2 = _interopRequireDefault(_chainLink);
+var _component2 = _interopRequireDefault(_component);
 
 var _sinon = require("sinon");
 
@@ -22,8 +22,8 @@ describe("propertyCollection.isAggregate", function () {
 	    propertyNames = void 0,
 	    propertyCollection = void 0;
 
-	var ParentLink = function (_ChainLink) {
-		_inherits(ParentLink, _ChainLink);
+	var ParentLink = function (_Component) {
+		_inherits(ParentLink, _Component);
 
 		function ParentLink() {
 			_classCallCheck(this, ParentLink);
@@ -32,19 +32,19 @@ describe("propertyCollection.isAggregate", function () {
 		}
 
 		return ParentLink;
-	}(_chainLink2.default);
+	}(_component2.default);
 
 	/* Test Setup For Scope */
 
 
 	beforeEach(function () {
-		_chainLink.ParameterCollection.prototype.initialize = _sinon2.default.spy(_chainLink.ParameterCollection.prototype.initialize);
+		_component.PropertyCollection.prototype.initialize = _sinon2.default.spy(_component.PropertyCollection.prototype.initialize);
 
 		propertyNames = ["name", "age"];
 
 		parentLink = new ParentLink();
 
-		propertyCollection = new _chainLink.ParameterCollection(parentLink, propertyNames);
+		propertyCollection = new _component.PropertyCollection(parentLink, propertyNames);
 	});
 
 	it("should return false by default", function () {
