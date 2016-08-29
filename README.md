@@ -133,6 +133,22 @@ person.citiesVisited("Colorado Springs", "CO");
 person.citiesVisited(); // [["Toledo", "OH"], ["Colorado Springs", "CO"]]
 ```
 
+### `.multi.aggregate.flat`
+
+``` javascript
+class Person extends Component {
+  initialize() {
+    this.properties("values").multi.aggregate.flat;
+  }
+}
+
+const person = new Person();
+
+person.values("one", "two");
+person.values("three", "four");
+person.values(); // [ "one", "two", "three", "four" ]
+```
+
 ### `.merged`
 
 ``` javascript

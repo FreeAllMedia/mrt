@@ -32,6 +32,7 @@ var PropertyCollection = function () {
 		_.multi = false;
 		_.isBoolean = false;
 		_.merged = false;
+		_.flat = false;
 		_.filters = [];
 
 		this.properties = {};
@@ -56,7 +57,11 @@ var PropertyCollection = function () {
 
 					if (_.aggregate || _.multi) {
 						if (_.aggregate) {
-							_this.properties[propertyName].push(newValue);
+							if (_.flat) {
+								_this.properties[propertyName] = _this.properties[propertyName].concat(newValue);
+							} else {
+								_this.properties[propertyName].push(newValue);
+							}
 						} else {
 							_this.properties[propertyName] = newValue;
 						}
@@ -184,6 +189,12 @@ var PropertyCollection = function () {
 				};
 			});
 
+			return this;
+		}
+	}, {
+		key: "flat",
+		get: function get() {
+			(0, _incognito2.default)(this).flat = true;
 			return this;
 		}
 	}]);

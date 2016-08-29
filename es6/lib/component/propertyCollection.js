@@ -11,6 +11,7 @@ export default class PropertyCollection {
 		_.multi = false;
 		_.isBoolean = false;
 		_.merged = false;
+		_.flat = false;
 		_.filters = [];
 
 		this.properties = {};
@@ -31,7 +32,11 @@ export default class PropertyCollection {
 
 					if (_.aggregate || _.multi) {
 						if (_.aggregate) {
-							this.properties[propertyName].push(newValue);
+							if (_.flat) {
+								this.properties[propertyName] = this.properties[propertyName].concat(newValue);
+							} else {
+								this.properties[propertyName].push(newValue);
+							}
 						} else {
 							this.properties[propertyName] = newValue;
 						}
@@ -137,6 +142,11 @@ export default class PropertyCollection {
 			};
 		});
 
+		return this;
+	}
+
+	get flat() {
+		privateData(this).flat = true;
 		return this;
 	}
 }
