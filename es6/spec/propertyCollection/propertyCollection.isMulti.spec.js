@@ -1,5 +1,5 @@
 /* Dependencies */
-import ChainLink, { ParameterCollection } from "../../lib/chainLink/chainLink.js";
+import Component, { PropertyCollection } from "../../lib/component/component.js";
 import sinon from "sinon";
 
 describe("propertyCollection.isMulti", () => {
@@ -7,11 +7,11 @@ describe("propertyCollection.isMulti", () => {
 			propertyNames,
 			propertyCollection;
 
-	class ParentLink extends ChainLink {}
+	class ParentLink extends Component {}
 
 	/* Test Setup For Scope */
 	beforeEach(() => {
-		ParameterCollection.prototype.initialize = sinon.spy(ParameterCollection.prototype.initialize);
+		PropertyCollection.prototype.initialize = sinon.spy(PropertyCollection.prototype.initialize);
 
 		propertyNames = [
 			"name",
@@ -20,7 +20,7 @@ describe("propertyCollection.isMulti", () => {
 
 		parentLink = new ParentLink();
 
-		propertyCollection = new ParameterCollection(parentLink, propertyNames);
+		propertyCollection = new PropertyCollection(parentLink, propertyNames);
 	});
 
 	it("should return false by default", () => {
