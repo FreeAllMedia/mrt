@@ -49,10 +49,10 @@ Whenever one constructor extends another, `.super` must be called in the extende
 This can be a gotcha for many developers, so MrT has a built-in pseudo-constructor called `.initialize` that can be used by extended objects without the need to call `.super`.
 
 ``` javascript
-import ChainLink from "mrt";
+import Component from "mrt";
 
 // Without using initialize
-class Person extends ChainLink {
+class Person extends Component {
   constructor(name) {
     super(name);
     this.properties("name");
@@ -61,7 +61,7 @@ class Person extends ChainLink {
 }
 
 // Using initialize
-class Person extends ChainLink {
+class Person extends Component {
   initialize(name) {
     this.properties("name");
     this.name(name);
@@ -74,7 +74,7 @@ class Person extends ChainLink {
 Define a simple chainable property that sets and gets a raw value:
 
 ``` javascript
-class Person extends ChainLink {
+class Person extends Component {
   initialize() {
     this.properties("name");
   }
@@ -89,7 +89,7 @@ person.name(); // "Jana"
 ### `.multi`
 
 ``` javascript
-class Person extends ChainLink {
+class Person extends Component {
   initialize() {
     this.properties("nicknames").multi;
   }
@@ -104,7 +104,7 @@ person.nicknames(); // ["Jana Banana", "Jananana"]
 ### `.aggregate`
 
 ``` javascript
-class Person extends ChainLink {
+class Person extends Component {
   initialize() {
     this.properties("nicknames").aggregate;
   }
@@ -120,7 +120,7 @@ person.nicknames(); // ["Jana Banana", "Jananana"]
 ### `.multi.aggregate`
 
 ``` javascript
-class Person extends ChainLink {
+class Person extends Component {
   initialize() {
     this.properties("citiesVisited").multi.aggregate;
   }
@@ -136,7 +136,7 @@ person.citiesVisited(); // [["Toledo", "OH"], ["Colorado Springs", "CO"]]
 ### `.merged`
 
 ``` javascript
-class Person extends ChainLink {
+class Person extends Component {
   initialize() {
     this.properties("favoriteCities").merged;
   }
@@ -152,7 +152,7 @@ person.mergedValues(); // {"CO": "Boulder", "KS": "Wichita"}
 ### `.filter`
 
 ``` javascript
-class Person extends ChainLink {
+class Person extends Component {
   initialize() {
     this.properties("favoriteNumber").filter(this.castIntegers);
   }
@@ -180,15 +180,15 @@ A link creates a method which returns a new instance of the provided `linkConstr
 The new instance is given a copy of all methods from the parent link. This is what enables MrT to chain multiple tiers.
 
 ``` javascript
-import ChainLink from "mrt";
+import Component from "mrt";
 
-class Car extends ChainLink {
+class Car extends Component {
   initialize() {
     this.link("wheel", Wheel);
   }
 }
 
-class Wheel extends ChainLink {
+class Wheel extends Component {
   initialize(diameter) {
     this.properties("diameter");
     this.diameter(diameter);
@@ -208,15 +208,15 @@ car
 ### `.getter`
 
 ``` javascript
-import ChainLink from "mrt";
+import Component from "mrt";
 
-class Car extends ChainLink {
+class Car extends Component {
   initialize() {
     this.link("wheel", Wheel).getter;
   }
 }
 
-class Wheel extends ChainLink {}
+class Wheel extends Component {}
 
 const car = new Car();
 
@@ -231,16 +231,16 @@ car
 ### `.inherit(...propertyNames)`
 
 ``` javascript
-import ChainLink from "mrt";
+import Component from "mrt";
 
-class Car extends ChainLink {
+class Car extends Component {
   initialize() {
     this.properties("color");
     this.link("door", Door).inherit("color");
   }
 }
 
-class Door extends ChainLink {}
+class Door extends Component {}
 
 const car = new Car();
 
@@ -254,16 +254,16 @@ door.color(); // "Red"
 ### `.into(collectionName)`
 
 ``` javascript
-import ChainLink from "mrt";
+import Component from "mrt";
 
-class Car extends ChainLink {
+class Car extends Component {
   initialize() {
     this.properties("color");
     this.link("door", Door).into("doors");
   }
 }
 
-class Door extends ChainLink {}
+class Door extends Component {}
 
 const car = new Car();
 
@@ -277,16 +277,16 @@ car.doors.length; // 2
 ### `.into(collectionName).key(keyName)`
 
 ``` javascript
-import ChainLink from "mrt";
+import Component from "mrt";
 
-class Car extends ChainLink {
+class Car extends Component {
   initialize() {
     this.properties("color");
     this.link("door", Door).into("doors").key("side");
   }
 }
 
-class Door extends ChainLink {
+class Door extends Component {
   initialize(side) {
     this.properties("side");
     this.side(side);
@@ -306,9 +306,9 @@ car.doors.right; // right door object
 ### `.then(thenFunction)`
 
 ``` javascript
-import ChainLink from "mrt";
+import Component from "mrt";
 
-class Car extends ChainLink {
+class Car extends Component {
   initialize() {
     this.properties("color");
     this.link("door", Door).then(newDoor => {
@@ -317,7 +317,7 @@ class Car extends ChainLink {
   }
 }
 
-class Door extends ChainLink {}
+class Door extends Component {}
 
 const car = new Car();
 
@@ -329,16 +329,16 @@ car
 ### `.apply(...passedArguments)`
 
 ``` javascript
-import ChainLink from "mrt";
+import Component from "mrt";
 
-class Car extends ChainLink {
+class Car extends Component {
   initialize() {
     this.properties("color");
     this.link("door", Door).apply(this);
   }
 }
 
-class Door extends ChainLink {
+class Door extends Component {
   initialize(car, color) {
     car; // Automatically passed by .arguments(this) in Car
 		color; // "green"
