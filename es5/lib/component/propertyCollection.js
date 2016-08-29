@@ -34,6 +34,7 @@ var PropertyCollection = function () {
 		_.merged = false;
 		_.flat = false;
 		_.filters = [];
+		_.thens = [];
 
 		this.properties = {};
 
@@ -68,6 +69,11 @@ var PropertyCollection = function () {
 					} else {
 						_this.properties[propertyName] = newValue;
 					}
+
+					_.thens.forEach(function (then) {
+						then(newValue);
+					});
+
 					return parentLink;
 				} else {
 					return _this.properties[propertyName];
@@ -96,6 +102,12 @@ var PropertyCollection = function () {
 		key: "filter",
 		value: function filter(filterFunction) {
 			(0, _incognito2.default)(this).filters.push(filterFunction);
+			return this;
+		}
+	}, {
+		key: "then",
+		value: function then(thenFunction) {
+			(0, _incognito2.default)(this).thens.push(thenFunction);
 			return this;
 		}
 	}, {
