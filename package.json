@@ -1,6 +1,6 @@
 {
   "name": "mrt",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Helps build expressive chained interfaces.",
   "main": "index.js",
   "scripts": {

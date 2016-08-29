@@ -165,7 +165,7 @@ person.mergedValues({"CO": "Boulder"});
 person.mergedValues(); // {"CO": "Boulder", "KS": "Wichita"}
 ```
 
-### `.filter`
+### `.filter(filterFunction)`
 
 ``` javascript
 class Person extends Component {
@@ -180,6 +180,27 @@ class Person extends Component {
     } else {
       return value;
     }
+  }
+}
+
+const person = new Person();
+
+person.favoriteNumber("1");
+person.favoriteNumber(); // 1
+```
+
+### `.then(callback)`
+
+Call a synchronous callback each time a new value is set on the property
+
+``` javascript
+class Person extends Component {
+  initialize() {
+    this.properties("favoriteNumber").then(this.doSomething);
+  }
+
+  doSomething(value) {
+    // No returns. Just a simple synchronous callback.
   }
 }
 
