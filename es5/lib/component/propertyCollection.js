@@ -71,7 +71,11 @@ var PropertyCollection = function () {
 					}
 
 					_.thens.forEach(function (then) {
-						then(newValue);
+						if (_.multi) {
+							then.apply(_.parentLink, newValue);
+						} else {
+							then.call(_.parentLink, newValue);
+						}
 					});
 
 					return parentLink;

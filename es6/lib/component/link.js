@@ -135,7 +135,7 @@ export default class Link {
 		}
 
 		if (_.then) {
-			_.then(instance);
+			_.then.call(this.parentLink, instance);
 		}
 
 		return instance;

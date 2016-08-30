@@ -6,10 +6,6 @@ var _component = require("../../lib/component/component.js");
 
 var _component2 = _interopRequireDefault(_component);
 
-var _sinon = require("sinon");
-
-var _sinon2 = _interopRequireDefault(_sinon);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -18,58 +14,52 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-describe("component.link.then", function () {
-	var person = void 0,
-	    thought = void 0,
-	    thenFunction = void 0,
-	    actualContext = void 0;
+describe(".properties.then(thenFunction)", function () {
+	var numbers = void 0,
+	    actualContext = void 0,
+	    results = void 0,
+	    returnValue = void 0;
 
-	var Person = function (_Component) {
-		_inherits(Person, _Component);
+	var Numbers = function (_Component) {
+		_inherits(Numbers, _Component);
 
-		function Person() {
-			_classCallCheck(this, Person);
+		function Numbers() {
+			_classCallCheck(this, Numbers);
 
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(Person).apply(this, arguments));
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(Numbers).apply(this, arguments));
 		}
 
-		_createClass(Person, [{
+		_createClass(Numbers, [{
 			key: "initialize",
 			value: function initialize() {
-				this.link("thought", Thought).then(thenFunction);
+				returnValue = this.properties("values").multi.aggregate.flat.then(function (value) {
+					actualContext = this;
+					results.push(value);
+				});
 			}
 		}]);
 
-		return Person;
-	}(_component2.default);
-
-	var Thought = function (_Component2) {
-		_inherits(Thought, _Component2);
-
-		function Thought() {
-			_classCallCheck(this, Thought);
-
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(Thought).apply(this, arguments));
-		}
-
-		return Thought;
+		return Numbers;
 	}(_component2.default);
 
 	beforeEach(function () {
-		thenFunction = function thenFunction(component) {
-			actualContext = this;
-			component.thenCalledWith = component;
-		};
-
-		person = new Person();
-		thought = person.thought();
+		actualContext = null;
+		results = [];
+		numbers = new Numbers();
 	});
 
-	it("should call then with the newly instantiated component", function () {
-		thought.thenCalledWith.should.eql(thought);
+	it("should return this when setting to enable chaining", function () {
+		var propertyCollection = numbers.propertyCollections()[0];
+		returnValue.should.eql(propertyCollection);
+	});
+
+	it("should call .then each time the property has a value set", function () {
+		numbers.values("1").values("2").values("3");
+		results.should.eql(["1", "2", "3"]);
 	});
 
 	it("should be called with the correct context", function () {
-		actualContext.should.eql(person);
+		numbers.values("1");
+		actualContext.should.eql(numbers);
 	});
 });
