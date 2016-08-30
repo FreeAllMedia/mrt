@@ -46,7 +46,11 @@ export default class PropertyCollection {
 					}
 
 					_.thens.forEach(then => {
-						then(newValue);
+						if (_.multi) {
+							then.apply(_.parentLink, newValue);
+						} else {
+							then.call(_.parentLink, newValue);
+						}
 					});
 
 					return parentLink;

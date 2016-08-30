@@ -8,7 +8,8 @@ describe(".properties.then(thenFunction)", () => {
 
 	class Numbers extends Component {
 		initialize() {
-			returnValue = this.properties("value")
+			returnValue = this.properties("values")
+				.multi.aggregate.flat
 				.then(function (value) {
 					actualContext = this;
 					results.push(value);
@@ -29,14 +30,14 @@ describe(".properties.then(thenFunction)", () => {
 
 	it("should call .then each time the property has a value set", () => {
 		numbers
-			.value("1")
-			.value("2")
-			.value("3");
+			.values("1")
+			.values("2")
+			.values("3");
 		results.should.eql([ "1", "2", "3" ]);
 	});
 
 	it("should be called with the correct context", () => {
-		numbers.value("1");
+		numbers.values("1");
 		actualContext.should.eql(numbers);
 	});
 });
