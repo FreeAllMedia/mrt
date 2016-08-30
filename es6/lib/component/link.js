@@ -28,6 +28,7 @@ export default class Link {
 	}
 
 	apply(...newArguments) {
+		console.log({ newArguments });
 		const _ = privateData(this);
 		_.useArguments = _.useArguments.concat(newArguments);
 		return this;

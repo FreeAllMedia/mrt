@@ -54,12 +54,12 @@ var Link = function () {
 	}, {
 		key: "apply",
 		value: function apply() {
-			var _ = (0, _incognito2.default)(this);
-
 			for (var _len = arguments.length, newArguments = Array(_len), _key = 0; _key < _len; _key++) {
 				newArguments[_key] = arguments[_key];
 			}
 
+			console.log({ newArguments: newArguments });
+			var _ = (0, _incognito2.default)(this);
 			_.useArguments = _.useArguments.concat(newArguments);
 			return this;
 		}
