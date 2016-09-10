@@ -30,8 +30,13 @@ describe(".properties.then(thenFunction)", () => {
 	it("should call .then each time the property has a value set", () => {
 		numbers
 			.value("1")
-			.value("2")
+			.value("2");
+
+		numbers.value();
+
+		numbers
 			.value("3");
+
 		results.should.eql([ "1", "2", "3" ]);
 	});
 

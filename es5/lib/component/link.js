@@ -54,12 +54,12 @@ var Link = function () {
 	}, {
 		key: "apply",
 		value: function apply() {
+			var _ = (0, _incognito2.default)(this);
+
 			for (var _len = arguments.length, newArguments = Array(_len), _key = 0; _key < _len; _key++) {
 				newArguments[_key] = arguments[_key];
 			}
 
-			console.log({ newArguments: newArguments });
-			var _ = (0, _incognito2.default)(this);
 			_.useArguments = _.useArguments.concat(newArguments);
 			return this;
 		}
@@ -97,14 +97,16 @@ var Link = function () {
 			});
 
 			methodNames.forEach(function (propertyName) {
-				var propertyDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(_this2.parentLink), propertyName);
-				if (propertyDescriptor.value) {
-					propertyDescriptor.value = propertyDescriptor.value.bind(_this2.parentLink);
+				if (!instance[propertyName]) {
+					var propertyDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(_this2.parentLink), propertyName);
+					if (propertyDescriptor.value) {
+						propertyDescriptor.value = propertyDescriptor.value.bind(_this2.parentLink);
+					}
+					if (propertyDescriptor.get) {
+						propertyDescriptor.get = propertyDescriptor.get.bind(_this2.parentLink);
+					}
+					Object.defineProperty(instance, propertyName, propertyDescriptor);
 				}
-				if (propertyDescriptor.get) {
-					propertyDescriptor.get = propertyDescriptor.get.bind(_this2.parentLink);
-				}
-				Object.defineProperty(instance, propertyName, propertyDescriptor);
 			});
 
 			this.parentLink.links.all.forEach(function (link) {

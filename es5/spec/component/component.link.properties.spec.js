@@ -32,6 +32,11 @@ var Person = function (_Component) {
 			this.link("arm", Arm);
 			this.link("pet", Pet);
 		}
+	}, {
+		key: "dna",
+		get: function get() {
+			return "abcdefg";
+		}
 	}]);
 
 	return Person;
@@ -49,7 +54,8 @@ var Arm = function (_Component2) {
 	_createClass(Arm, [{
 		key: "initialize",
 		value: function initialize(length) {
-			this.properties("length");
+			this.properties("length", "dna");
+			this.dna("dagca");
 			this.length(length);
 		}
 	}]);
@@ -88,6 +94,10 @@ describe("component.link.properties", function () {
 
 	it("should be able to call properties on other links", function () {
 		person.arm().length(5).name().should.eql(name);
+	});
+
+	it("should be able to call overridden properties from a parent link", function () {
+		person.arm().dna("aabbagc").dna().should.eql("aabbagc");
 	});
 
 	it("should override identical parent properties", function () {

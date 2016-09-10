@@ -54,7 +54,12 @@ describe(".properties.then(thenFunction)", function () {
 	});
 
 	it("should call .then each time the property has a value set", function () {
-		numbers.value("1").value("2").value("3");
+		numbers.value("1").value("2");
+
+		numbers.value();
+
+		numbers.value("3");
+
 		results.should.eql(["1", "2", "3"]);
 	});
 
