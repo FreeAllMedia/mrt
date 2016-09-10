@@ -8,11 +8,16 @@ class Person extends Component {
 		this.link("arm", Arm);
 		this.link("pet", Pet);
 	}
+
+	get dna() {
+		return "abcdefg";
+	}
 }
 
 class Arm extends Component {
 	initialize(length) {
-		this.properties("length");
+		this.properties("length", "dna");
+		this.dna("dagca");
 		this.length(length);
 	}
 }
@@ -38,6 +43,12 @@ describe("component.link.properties", () => {
 			.arm()
 				.length(5)
 			.name().should.eql(name);
+	});
+
+	it("should be able to call overridden properties from a parent link", () => {
+		person.arm()
+			.dna("aabbagc")
+			.dna().should.eql("aabbagc");
 	});
 
 	it("should override identical parent properties", () => {

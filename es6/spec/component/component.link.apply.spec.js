@@ -2,7 +2,7 @@ import Component from "../../lib/component/component.js";
 
 class Person extends Component {
 	initialize() {
-		this.link("thought", Thought).apply(this);
+		this.link("thought", Thought).apply(this, 0);
 	}
 }
 
@@ -27,6 +27,6 @@ describe("component.link.apply", () => {
 	});
 
 	it("should add the newly instantiated chain link to the designated collection", () => {
-		thought.options.should.eql([person, 1, 2, 3]);
+		thought.options.should.eql([person, 0, 1, 2, 3]);
 	});
 });
