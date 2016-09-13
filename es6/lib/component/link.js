@@ -130,8 +130,13 @@ export default class Link {
 				if (this.parentLink.hasOwnProperty(getMethodName)) {
 					instance[propertyName];
 				} else {
-					const propertyValue = this.parentLink[propertyName]();
-					instance[propertyName](propertyValue);
+					if (typeof this.parentLink[propertyName] === "function") {
+						const propertyValue = this.parentLink[propertyName]();
+						instance[propertyName](propertyValue);
+					} else {
+						const propertyValue = this.parentLink[propertyName];
+						instance[propertyName] = propertyValue;
+					}
 				}
 			});
 		}
