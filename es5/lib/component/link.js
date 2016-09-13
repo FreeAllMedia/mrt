@@ -174,8 +174,13 @@ var Link = function () {
 					if (_this2.parentLink.hasOwnProperty(getMethodName)) {
 						instance[propertyName];
 					} else {
-						var propertyValue = _this2.parentLink[propertyName]();
-						instance[propertyName](propertyValue);
+						if (typeof _this2.parentLink[propertyName] === "function") {
+							var propertyValue = _this2.parentLink[propertyName]();
+							instance[propertyName](propertyValue);
+						} else {
+							var _propertyValue = _this2.parentLink[propertyName];
+							instance[propertyName] = _propertyValue;
+						}
 					}
 				});
 			}
