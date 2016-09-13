@@ -5,9 +5,8 @@ class Person extends Component {
 		this.properties("dna", "color");
 		this.properties("numb").boolean;
 
-		this
-		.link("arm", Arm)
-		.inherit("dna", "color", "numb");
+		this.link("arm", Arm)
+			.inherit("dna", "color", "numb");
 	}
 }
 
